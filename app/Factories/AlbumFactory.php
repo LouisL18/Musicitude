@@ -25,13 +25,13 @@ class AlbumFactory {
     public function getAlbumByName($name) {
         $stmt = $this->pdo->prepare('SELECT * FROM ALBUM WHERE nomAlbum = :nom');
         $stmt->execute(['nom' => $name]);
-        return $stmt->fetchObject(Album::class);
+        return $stmt->fetchAll(PDO::FETCH_CLASS, Album::class);
     }
 
     public function getAlbumByArtist($id_artist) {
         $stmt = $this->pdo->prepare('SELECT * FROM ALBUM WHERE idArtiste = :id_artist');
         $stmt->execute(['id_artist' => $id_artist]);
-        return $stmt->fetchObject(Album::class);
+        return $stmt->fetchAll(PDO::FETCH_CLASS, Album::class);
     }
 
     public function createAlbum(Album $album) {
