@@ -8,18 +8,19 @@ class Router
         'POST' => []
     ];
 
-    public function get($uri, $controller)
-    {
+    public function get($uri, $controller) {
         $this->routes['GET'][$uri] = $controller;
     }
 
-    public function post($uri, $controller)
-    {
+    public function post($uri, $controller) {
         $this->routes['POST'][$uri] = $controller;
     }
+
+    public function delete($uri, $controller) {
+        $this->routes['DELETE'][$uri] = $controller;
+    }
     
-    public function run()
-    {
+    public function run() {
         $method = $_SERVER['REQUEST_METHOD'];
         $uri = $_SERVER['REQUEST_URI'];
         $uri_explode = explode('/', $_SERVER['REQUEST_URI']);
