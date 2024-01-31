@@ -5,7 +5,7 @@ use app\Models\Artist;
 use PDO;
 
 class AlbumFactory {
-    protected $pdo = $pdo;
+    protected $pdo;
 
     public function getAllArtists() {
         $stmt = $this->pdo->query('SELECT * FROM ARTISTE');
