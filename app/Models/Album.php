@@ -30,7 +30,7 @@ class Album {
         return $this->descriptionAlbum;
     }
 
-    public function anneeAlbum(): int {
+    public function getAnneeAlbum(): int {
         return $this->anneeAlbum;
     }
 
