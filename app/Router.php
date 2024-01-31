@@ -41,7 +41,11 @@ class Router
             if ($route === $uri_implode) {
                 $uri_explode = explode('/', $uri);
                 $id = end($uri_explode);
-                call_user_func_array($this->routes[$method][$uri_implode], [$id]);
+                if (is_numeric($id)) {
+                    call_user_func_array($this->routes[$method][$uri_implode], [$id]);
+                } else {
+                    call_user_func($this->routes[$method][$uri_implode]);
+                }
                 $found = true;
                 break;
             }
