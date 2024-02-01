@@ -25,7 +25,7 @@ $router->get('/albums', [$albumController, 'index']);
 $router->get('/album/{id}', [$albumController, 'detail']);
 $router->get('/artists', [$artistController, 'index']);
 $router->get('/artist/{id}', [$artistController, 'detail']);
-$router->get('/user', [$userController, 'index']);
+$router->get('/user', [$userController, 'profile']);
 $router->get('/albums/search', [$albumController, 'search']);
 
 $router->put('/album/{id}', [$albumController, 'update']);
@@ -41,7 +41,6 @@ $router->post('/album', [$albumController, 'create']);
 $router->post('/artist', [$artistController, 'create']);
 $router->post('/user', [$userController, 'create']);
 $router->post('/logout', [$userController, 'logout']);
-$router->post('/login', [$userController, 'login']);
 $router->post('/register', [$userController, 'register']);
 $router->post('/albums/search', [$albumController, 'search']);
 
