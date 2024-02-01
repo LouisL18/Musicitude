@@ -23,7 +23,7 @@ CREATE TABLE UTILISATEUR (
     idUtilisateur int,
     nomUtilisateur varchar(255),
     prenomUtilisateur varchar(255),
-    emailUtilisateur varchar(255),
+    emailUtilisateur varchar(255) UNIQUE,
     motDePasseUtilisateur varchar(255),
     idImage int,
     constraint pk_utilisateur primary key (idUtilisateur),
