@@ -1,14 +1,19 @@
 <?php
 namespace app\Controllers;
 
-use app\Models\Album;
 use app\Factories\AlbumFactory;
+use app\Factories\ArtistFactory;
+use app\Factories\UserFactory;
 
 class AlbumController {
     protected $albumFactory;
+    protected $artistFactory;
+    protected $userFactory;
 
-    public function __construct(AlbumFactory $albumFactory) {
+    public function __construct(AlbumFactory $albumFactory, ArtistFactory $artistFactory, UserFactory $userFactory) {
         $this->albumFactory = $albumFactory;
+        $this->artistFactory = $artistFactory;
+        $this->userFactory = $userFactory;
     }
 
     public function index() {
