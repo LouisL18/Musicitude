@@ -4,24 +4,28 @@ namespace app\Factories;
 use app\Models\Artist;
 use PDO;
 
-class AlbumFactory {
+class ArtistFactory {
     protected $pdo;
+
+    public function __construct(PDO $pdo) {
+        $this->pdo = $pdo;
+    }
 
     public function getAllArtists() {
         $stmt = $this->pdo->query('SELECT * FROM ARTISTE');
-        return $stmt->fetchAll(PDO::FETCH_CLASS, Artist::class);
+        return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Artist::class, [intval('idArtiste'), 'nomArtiste', 'descriptionArtiste']);
     }
 
     public function getArtistById($id) {
         $stmt = $this->pdo->prepare('SELECT * FROM ARTISTE WHERE idArtiste = :id');
         $stmt->execute(['id' => $id]);
-        return $stmt->fetchObject(Artist::class);
+        return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Artist::class, [intval('idArtiste'), 'nomArtiste', 'descriptionArtiste']);
     }
 
     public function getArtistByName($name) {
         $stmt = $this->pdo->prepare('SELECT * FROM ARTISTE WHERE nomArtiste = :name');
         $stmt->execute(['nomArtiste' => $name]);
-        return $stmt->fetchAll(PDO::FETCH_CLASS, Artist::class);
+        return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Artist::class, [intval('idArtiste'), 'nomArtiste', 'descriptionArtiste']);
     }
 
     public function createArtist(Artist $artist) {

@@ -4,12 +4,12 @@ namespace app\Models;
 class Album {
     private int $idAlbum;
     private string $nomAlbum;
-    private string $descriptionAlbum;
+    private string|null $descriptionAlbum;
     private int $anneeAlbum;
     private int $idArtiste;
-    private int $idImage;
+    private int|null $idImage;
 
-    public function __construct(int $idAlbum, string $nomAlbum, string $descriptionAlbum, int $anneeAlbum, int $idArtiste, int $idImage) {
+    public function __construct(int $idAlbum, string $nomAlbum, string|null $descriptionAlbum, int $anneeAlbum, int $idArtiste, int|null $idImage) {
         $this->idAlbum = $idAlbum;
         $this->nomAlbum = $nomAlbum;
         $this->descriptionAlbum = $descriptionAlbum;
@@ -26,7 +26,7 @@ class Album {
         return $this->nomAlbum;
     }
 
-    public function getDescriptionAlbum(): string {
+    public function getDescriptionAlbum(): string|null {
         return $this->descriptionAlbum;
     }
 
@@ -38,7 +38,7 @@ class Album {
         return $this->idArtiste;
     }
 
-    public function getIdImage(): int {
+    public function getIdImage(): int|null {
         return $this->idImage;
     }
 

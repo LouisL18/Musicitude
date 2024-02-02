@@ -13,25 +13,25 @@ class AlbumFactory {
 
     public function getAllAlbums() {
         $stmt = $this->pdo->query('SELECT * FROM ALBUM');
-        return $stmt->fetchAll(PDO::FETCH_CLASS, Album::class);
+        return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Album::class, [intval('idAlbum'), 'nomAlbum', 'descriptionAlbum', intval('anneeAlbum'), intval('idArtiste'), intval('idImage')]);
     }
 
     public function getAlbumById($id) {
         $stmt = $this->pdo->prepare('SELECT * FROM ALBUM WHERE idAlbum = :id');
         $stmt->execute(['id' => $id]);
-        return $stmt->fetchObject(Album::class);
+        return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Album::class, [intval('idAlbum'), 'nomAlbum', 'descriptionAlbum', intval('anneeAlbum'), intval('idArtiste'), intval('idImage')]);
     }
 
     public function getAlbumByName($name) {
         $stmt = $this->pdo->prepare('SELECT * FROM ALBUM WHERE nomAlbum = :nom');
         $stmt->execute(['nom' => $name]);
-        return $stmt->fetchAll(PDO::FETCH_CLASS, Album::class);
+        return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Album::class, [intval('idAlbum'), 'nomAlbum', 'descriptionAlbum', intval('anneeAlbum'), intval('idArtiste'), intval('idImage')]);
     }
 
     public function getAlbumByArtist($id_artist) {
         $stmt = $this->pdo->prepare('SELECT * FROM ALBUM WHERE idArtiste = :id_artist');
         $stmt->execute(['id_artist' => $id_artist]);
-        return $stmt->fetchAll(PDO::FETCH_CLASS, Album::class);
+        return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Album::class, [intval('idAlbum'), 'nomAlbum', 'descriptionAlbum', intval('anneeAlbum'), intval('idArtiste'), intval('idImage')]);
     }
 
     public function createAlbum(Album $album) {

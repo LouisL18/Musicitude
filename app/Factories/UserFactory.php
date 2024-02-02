@@ -13,25 +13,25 @@ class UserFactory {
 
     public function getAllUsers() {
         $stmt = $this->pdo->query('SELECT * FROM UTILISATEUR');
-        return $stmt->fetchAll(PDO::FETCH_CLASS, User::class);
+        return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, User::class, [intval('idUtilisateur'), 'nomUtilisateur', 'prenomUtilisateur', 'emailUtilisateur', 'motDePasseUtilisateur', intval('idImage')]);
     }
 
     public function getUserById($id) {
         $stmt = $this->pdo->prepare('SELECT * FROM UTILISATEUR WHERE idUtilisateur = :id');
         $stmt->execute(['id' => $id]);
-        return $stmt->fetchObject(User::class);
+        return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, User::class, [intval('idUtilisateur'), 'nomUtilisateur', 'prenomUtilisateur', 'emailUtilisateur', 'motDePasseUtilisateur', intval('idImage')]);
     }
 
     public function getUserByName($name) {
         $stmt = $this->pdo->prepare('SELECT * FROM UTILISATEUR WHERE nomUtilisateur = :name');
         $stmt->execute(['nomUtilisateur' => $name]);
-        return $stmt->fetchAll(PDO::FETCH_CLASS, User::class);
+        return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, User::class, [intval('idUtilisateur'), 'nomUtilisateur', 'prenomUtilisateur', 'emailUtilisateur', 'motDePasseUtilisateur', intval('idImage')]);
     }
 
     public function getUserByEmail($email) {
         $stmt = $this->pdo->prepare('SELECT * FROM UTILISATEUR WHERE emailUtilisateur = :email');
         $stmt->execute(['emailUtilisateur' => $email]);
-        return $stmt->fetchObject(User::class);
+        return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, User::class, [intval('idUtilisateur'), 'nomUtilisateur', 'prenomUtilisateur', 'emailUtilisateur', 'motDePasseUtilisateur', intval('idImage')]);
     }
 
     public function createUser(User $user) {
