@@ -1,0 +1,40 @@
+<?php
+namespace app\Models;
+
+class Artist {
+    private int $idArtiste;
+    private string $nomArtiste;
+    private string $descriptionArtiste;
+
+    public function __construct(int $idArtiste, string $nomArtiste, string $descriptionArtiste) {
+        $this->idArtiste = $idArtiste;
+        $this->nomArtiste = $nomArtiste;
+        $this->descriptionArtiste = $descriptionArtiste;
+    }
+
+    public function getIdArtiste(): int {
+        return $this->idArtiste;
+    }
+
+    public function getNomArtiste(): string {
+        return $this->nomArtiste;
+    }
+
+    public function getDescriptionArtiste(): string {
+        return $this->descriptionArtiste;
+    }
+
+    public function fullRender(): string {
+        return sprintf(
+            "<div>
+                <p>%d</p>
+                <p>%s</p>
+                <p>%s</p>
+            </div>",
+            $this->idArtiste,
+            $this->nomArtiste,
+            $this->descriptionArtiste
+        );
+    }
+}
+?>
