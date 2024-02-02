@@ -1,5 +1,4 @@
 <?php
-
 namespace provider;
 
 class DatabaseProvider {
@@ -136,7 +135,4 @@ class DatabaseProvider {
         }
     }
 }
-
-$pdo = DatabaseProvider::getDataBase();
-
 ?>
