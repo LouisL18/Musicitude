@@ -67,7 +67,7 @@ class AlbumFactory {
     }
 
     public function getImageById($id) {
-        $stmt = $this->pdo->prepare('SELECT * FROM IMAGE WHERE idImage = :id');
+        $stmt = $this->pdo->prepare('SELECT * FROM IMAGE_BD WHERE idImage = :id');
         $stmt->execute(['id' => $id]);
         return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Image::class, [intval('idImage'), 'nomImage', 'dataImage']);
     }

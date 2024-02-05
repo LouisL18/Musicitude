@@ -3,10 +3,10 @@ namespace app\Models;
 
 class Image {
     private int $idImage;
-    private string $nomImage;
+    private string|null $nomImage;
     private $dataImage;
 
-    public function __construct(int $idImage, string $nomImage, $dataImage) {
+    public function __construct(int $idImage, string|null $nomImage, $dataImage) {
         $this->idImage = $idImage;
         $this->nomImage = $nomImage;
         $this->dataImage = $dataImage;
@@ -16,7 +16,7 @@ class Image {
         return $this->idImage;
     }
 
-    public function getNomImage(): string {
+    public function getNomImage(): string|null {
         return $this->nomImage;
     }
 
