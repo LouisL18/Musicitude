@@ -1,3 +1,71 @@
 body {
     overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    padding: 3rem;
+    margin: 1rem;
+    border-radius: 15px;
+    margin-bottom: 5rem;
+}
+
+.logo {
+    height: 50px;
+}
+
+.navbar:before, .navbar:after {
+    content: '';
+    position: absolute;
+    left: -2px;
+    top: -2px;
+    background: linear-gradient(45deg, #fb0094, #0000ff, #00ff00,#ffff00, #ff0000, #fb0094, 
+    #0000ff, #00ff00,#ffff00, #ff0000);
+    background-size: 400%;
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    z-index: -1;
+    animation: steam 60s linear infinite;
+    border-radius: 15px;
+}
+
+@keyframes steam {
+    0% {
+        background-position: 0 0;
+    }
+    50% {
+        background-position: 400% 0;
+    }
+    100% {
+        background-position: 0 0;
+    }
+}
+
+.navbar:after {
+    filter: blur(20px);
+    border-radius: 15px;
+}
+
+.navbar img {
+    width: 8rem;
+    height: 100%;
+}
+
+.navbar .navbar-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu {
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    border-radius: 15px; 
+    text-align: center;
 }

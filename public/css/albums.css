@@ -15,7 +15,7 @@
     width: calc(100% + 4px);
     height: calc(100% + 4px);
     z-index: -1;
-    animation: steam 20s linear infinite;
+    animation: steam 60s linear infinite;
     border-radius: 15px;
 }
 
