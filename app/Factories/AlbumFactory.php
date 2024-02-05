@@ -2,6 +2,7 @@
 namespace app\Factories;
 
 use app\Models\Album;
+use app\Models\Image;
 use PDO;
 
 class AlbumFactory {
@@ -63,6 +64,12 @@ class AlbumFactory {
         $stmt = $this->pdo->prepare('DELETE FROM ALBUM WHERE idAlbum = :id');
         $stmt->execute(['id' => $id]);
         return true;
+    }
+
+    public function getImageById($id) {
+        $stmt = $this->pdo->prepare('SELECT * FROM IMAGE WHERE idImage = :id');
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Image::class, [intval('idImage'), 'nomImage', 'dataImage']);
     }
 }
 ?>

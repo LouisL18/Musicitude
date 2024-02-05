@@ -18,6 +18,14 @@ class AlbumController {
 
     public function index() {
         $albums = $this->albumFactory->getAllAlbums();
+        $super_albums = [];
+        foreach($albums as $album) {
+            $super_albums[] = [
+                'Album' => $album,
+                'Artiste' => $this->artistFactory->getArtistById($album->getIdArtiste()),
+                'Image' => $this->albumFactory->getImageById($album->getIdImage()),
+            ];
+        }
         //genres ? + artistes ? + ... ?
         require_once 'app/Views/album/index.php';
     }
