@@ -2,6 +2,9 @@
 namespace app\Factories;
 
 use app\Models\Album;
+use app\Models\Image;
+use app\Models\Genre;
+use app\Models\Musique;
 use PDO;
 
 class AlbumFactory {
@@ -63,6 +66,30 @@ class AlbumFactory {
         $stmt = $this->pdo->prepare('DELETE FROM ALBUM WHERE idAlbum = :id');
         $stmt->execute(['id' => $id]);
         return true;
+    }
+
+    public function getImageById($id) {
+        $stmt = $this->pdo->prepare('SELECT * FROM IMAGE_BD WHERE idImage = :id');
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Image::class, [intval('idImage'), 'nomImage', 'dataImage']);
+    }
+
+    public function getGenresByAlbum($id) {
+        $stmt = $this->pdo->prepare('SELECT * FROM GENRE NATURAL JOIN EST_GENRE WHERE idAlbum = :id');
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Genre::class, [intval('idGenre'), 'nomGenre', 'descriptionGenre']);
+    }
+
+    public function getMusiquesByAlbum($id) {
+        $stmt = $this->pdo->prepare('SELECT * FROM MUSIQUE NATURAL JOIN EST_CONSTITUE where idAlbum = :id');
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Musique::class, [intval('idMusique'), 'nomMusique', 'descriptionMusique', 'idImage']);
+    }
+
+    public function getNoteMoyenneByAlbum($id) {
+        $stmt = $this->pdo->prepare('SELECT AVG(note) FROM NOTE WHERE idAlbum = :id');
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch();
     }
 }
 ?>

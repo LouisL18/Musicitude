@@ -18,7 +18,16 @@ class ArtistController {
 
     public function index() {
         $artists = $this->artistFactory->getAllArtists();
-        require_once 'app/Views/artist/index.php';
+        $super_artists = [];
+        foreach ($artists as $artist) {
+            $super_artists[] = [
+                'Artist' => $artist,
+                'Image' => $this->artistFactory->getImageByArtistId($artist->getIdArtiste()),
+            ];
+        }
+        global $main;
+        $main = require_once __DIR__.'/../Views/artist/index.php';
+        require_once __DIR__.'/../../public/index.php';
     }
 
     public function detail(int $id) {
