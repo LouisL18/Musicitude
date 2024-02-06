@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once __DIR__ . '../../provider/Routesloader.php';
-$header = require_once __DIR__  . '/components/header.php';
+$header = require_once __DIR__ . '/components/header.php';
 global $main;
 if (isset($css)) {
     $css = "<link rel='stylesheet' href='css/$css.css'>";

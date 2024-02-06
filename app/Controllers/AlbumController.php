@@ -26,8 +26,11 @@ class AlbumController {
                 'Image' => $this->albumFactory->getImageById($album->getIdImage()),
             ];
         }
-        //genres ? + artistes ? + ... ?
-        require_once 'app/Views/album/index.php';
+        global $main;
+        global $css;
+        $main = require_once __DIR__ . '/../Views/album/index.php';
+        $css = 'albums';
+        require_once __DIR__ . '/../../public/index.php';
     }
 
     public function detail(int $id) {
@@ -42,8 +45,8 @@ class AlbumController {
             'Note' => $this->albumFactory->getNoteMoyenneByAlbum($album->getIdAlbum()),
         ]; 
         global $main;
-        $main = require_once __DIR__.'/../Views/album/detail.php';
-        require_once __DIR__.'/../../public/index.php';
+        $main = require_once __DIR__ . '/../Views/album/detail.php';
+        require_once __DIR__ .' /../../public/index.php';
     }
 
     public function search() {
