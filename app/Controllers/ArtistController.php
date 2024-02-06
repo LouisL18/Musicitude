@@ -22,10 +22,12 @@ class ArtistController {
         foreach ($artists as $artist) {
             $super_artists[] = [
                 'Artist' => $artist,
-                'Image' => $this->artistFactory->getImageById($artist->getIdImage()),
+                'Image' => $this->artistFactory->getImageByArtistId($artist->getIdArtiste()),
             ];
         }
-        require_once 'app/Views/artist/index.php';
+        global $main;
+        $main = require_once __DIR__.'/../Views/artist/index.php';
+        require_once __DIR__.'/../../public/index.php';
     }
 
     public function detail(int $id) {

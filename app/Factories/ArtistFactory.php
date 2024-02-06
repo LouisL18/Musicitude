@@ -2,6 +2,7 @@
 namespace app\Factories;
 
 use app\Models\Artist;
+use app\Models\Image;
 use PDO;
 
 class ArtistFactory {
@@ -51,6 +52,22 @@ class ArtistFactory {
         $stmt = $this->pdo->prepare('DELETE FROM ARTISTE WHERE idArtiste = :id');
         $stmt->execute(['id' => $id]);
         return true;
+    }
+
+    public function getUserIdByArtistId($id) {
+        $stmt = $this->pdo->prepare('SELECT idUtilisateur FROM A_ROLE WHERE idArtiste = :id');
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetchAll(PDO::FETCH_COLUMN);
+    }
+    
+    public function getImageByArtistId($id) {
+        $userId = $this->getUserIdByArtistId($id)[0];
+        $stmt = $this->pdo->prepare('SELECT idImage FROM UTILISATEUR WHERE idUtilisateur = :id');
+        $stmt->execute(['id' => $userId]);
+        $idImage = $stmt->fetchColumn();
+        $stmt = $this->pdo->prepare('SELECT * FROM IMAGE_BD WHERE idImage = :id');
+        $stmt->execute(['id' => $idImage]);
+        return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Image::class, [$idImage, 'nomImage', 'urlImage']);
     }
 }
 ?>
