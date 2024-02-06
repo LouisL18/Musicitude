@@ -28,13 +28,16 @@ class ArtistFactory {
         return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Artist::class, [intval('idArtiste'), 'nomArtiste', 'descriptionArtiste']);
     }
 
-    public function createArtist(Artist $artist) {
-        $stmt = $this->pdo->prepare('INSERT INTO ARTISTE (nomArtiste, descriptionArtiste) VALUES (:nomArtiste, :descriptionArtiste)');
+    public function createArtist(string $nom , string $description) {
+        $stmt = $this->pdo->query('SELECT MAX(idArtiste) FROM ARTISTE');
+        $idArtiste = $stmt->fetchColumn() + 1;
+        $stmt = $this->pdo->prepare('INSERT INTO ARTISTE (idArtiste, nomArtiste, descriptionArtiste) VALUES (:idArtiste, :nomArtiste, :descriptionArtiste)');
         $stmt->execute([
-            'nomArtiste' => $artist->getNomArtiste(),
-            'descriptionArtiste'=> $artist->getDescriptionArtiste()
+            'idArtiste' => $idArtiste,
+            'nomArtiste' => $nom,
+            'descriptionArtiste'=> $description
             ]);
-        return true;
+        return $idArtiste;
     }
 
     public function updateArtist(Artist $artist) {
