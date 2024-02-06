@@ -1,5 +1,5 @@
 <?php
-if ($_SESSION['artist'] != null) {
+if ($_SESSION['artist_id'] != null) {
     $add_album = '<li><a class="dropdown-item" href="albums/create">Ajouter un album</a></li>';
 } else {
     $add_album = '';
