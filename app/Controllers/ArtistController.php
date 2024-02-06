@@ -18,6 +18,13 @@ class ArtistController {
 
     public function index() {
         $artists = $this->artistFactory->getAllArtists();
+        $super_artists = [];
+        foreach ($artists as $artist) {
+            $super_artists[] = [
+                'Artist' => $artist,
+                'Image' => $this->artistFactory->getImageById($artist->getIdImage()),
+            ];
+        }
         require_once 'app/Views/artist/index.php';
     }
 
