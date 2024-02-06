@@ -34,7 +34,7 @@ class User {
         return $this->emailUtilisateur;
     }
 
-    public function getMatDePasseUtilisateur(): string {
+    public function getMotDePasseUtilisateur(): string {
         return $this->motDePasseUtilisateur;
     }
 

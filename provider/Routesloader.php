@@ -20,6 +20,8 @@ $userController = new UserController(new UserFactory(DatabaseProvider::getDataBa
 $router = new Router();
 
 $router->get('/', [$userController, 'login']);
+$router->get('/login', [$userController, 'login']);
+$router->get('/logout', [$userController, 'logout']);
 $router->get('/register', [$userController, 'register']);
 $router->get('/albums', [$albumController, 'index']);
 $router->get('/album/{id}', [$albumController, 'detail']);
@@ -40,7 +42,7 @@ $router->post('/login', [$userController, 'login']);
 $router->post('/album', [$albumController, 'create']);
 $router->post('/artist', [$artistController, 'create']);
 $router->post('/user', [$userController, 'create']);
-$router->post('/logout', [$userController, 'logout']);
+//$router->post('/logout', [$userController, 'logout']);
 $router->post('/register', [$userController, 'register']);
 $router->post('/albums/search', [$albumController, 'search']);
 
