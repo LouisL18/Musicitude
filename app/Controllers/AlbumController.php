@@ -31,9 +31,19 @@ class AlbumController {
     }
 
     public function detail(int $id) {
-        $album = $this->albumFactory->getAlbumById($id);
-        //genres ? + artistes ? + ... ?
-        require_once 'app/Views/album/detail.php';
+        $album = $this->albumFactory->getAlbumById($id)[0];
+        $super_album = [];
+        $super_album[] = [
+            'Album' => $album,
+            'Artiste' => $this->artistFactory->getArtistById($album->getIdArtiste()),
+            'Image' => $this->albumFactory->getImageById($album->getIdImage()),
+            'Genres' => $this->albumFactory->getGenresByAlbum($album->getIdAlbum()),
+            'Musiques' => $this->albumFactory->getMusiquesByAlbum($album->getIdAlbum()),
+            'Note' => $this->albumFactory->getNoteMoyenneByAlbum($album->getIdAlbum()),
+        ]; 
+        global $main;
+        $main = require_once __DIR__.'/../Views/album/detail.php';
+        require_once __DIR__.'/../../public/index.php';
     }
 
     public function search() {
