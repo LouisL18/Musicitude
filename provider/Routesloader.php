@@ -19,7 +19,7 @@ $userController = new UserController(new UserFactory(DatabaseProvider::getDataBa
 
 $router = new Router();
 
-$router->get('/', [$userController, 'login']);
+$router->get('/', [$albumController, 'index']);
 $router->get('/login', [$userController, 'login']);
 $router->get('/logout', [$userController, 'logout']);
 $router->get('/register', [$userController, 'register']);
