@@ -1,4 +1,9 @@
 <?php
+if ($_SESSION['artist'] != null) {
+    $add_album = '<li><a class="dropdown-item" href="albums/create">Ajouter un album</a></li>';
+} else {
+    $add_album = '';
+}
 return <<<HTML
 <nav class="navbar navbar-expand-lg bg-secondary">
     <div class="container-fluid justify-content-between">
@@ -10,7 +15,7 @@ return <<<HTML
             <ul class="dropdown-menu bg-secondary" aria-labelledby="dropdownMenuLink">
                 <li><a class="dropdown-item" href="albums">Tous les albums</a></li>
                 <li><a class="dropdown-item" href="albums/search">Rechercher des albums</a></li>
-                <li><a class="dropdown-item" href="#">Ajouter un album</a></li>
+                $add_album
             </ul>
         </div>
         <div class="dropdown">
