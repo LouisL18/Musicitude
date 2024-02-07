@@ -16,6 +16,17 @@ class DatabaseProvider {
             $sql = file_get_contents(__DIR__.'/../data/creation_database.sql');
             $pdo->exec($sql);
 
+            //Insertion des roles
+            $pdo->exec('INSERT INTO ROLE_UTILISATEUR (idRole, nomRole) VALUES (1, "Artiste");');
+            $pdo->exec('INSERT INTO ROLE_UTILISATEUR (idRole, nomRole) VALUES (2, "Utilisateur");');
+
+            //Insertion de l'image par défaut
+            $imageData = file_get_contents(__DIR__.'/../data/images/default.jpg');
+            $base64Image = base64_encode($imageData);
+            $stmt = $pdo->prepare("INSERT INTO IMAGE_BD (idImage, dataImage) VALUES (0, :dataImage)");
+            $stmt->bindValue(':dataImage', $base64Image);
+            $stmt->execute();
+
             //Insertion des données depuis le fichier extrait.yml
             $lines = file(__DIR__.'/../data/extrait.yml');
 
@@ -38,7 +49,6 @@ class DatabaseProvider {
                     $currentKey = trim($key);
                     $currentItem[$currentKey] = trim($value);
                 } else {
-                    // Handle list items
                     if ($currentKey === 'genre') {
                         $currentItem[$currentKey] = array_map('trim', explode(',', $line));
                     }
@@ -52,6 +62,7 @@ class DatabaseProvider {
             $dico_artiste = array();
             $dico_genre = array();
             $dico_image = array();
+            $dico_image['default.jpg'] = 0;
         
             foreach($data as $elem) {
                 // Remplace la String de genre en liste 
@@ -74,6 +85,20 @@ class DatabaseProvider {
                     $stmt = $pdo->prepare("INSERT INTO artiste (idArtiste, nomArtiste) VALUES (:id, :nom)");
                     $stmt->bindValue(':id', $idArtiste);
                     $stmt->bindValue(':nom', $artiste);
+                    $stmt->execute();
+                    //Création de l'utilisateur associé à l'artiste 
+                    $stmt = $pdo->prepare("INSERT INTO UTILISATEUR (idUtilisateur, nomUtilisateur, prenomUtilisateur, emailUtilisateur, motDePasseUtilisateur, idImage) VALUES (:id, :nom, :prenom, :email, :mdp, :idImage)");
+                    $stmt->bindValue(':id', $idArtiste);
+                    $stmt->bindValue(':nom', $artiste);
+                    $stmt->bindValue(':prenom', $artiste);
+                    $stmt->bindValue(':email', $artiste.'@gmail.com');
+                    $stmt->bindValue(':mdp', $artiste);
+                    $stmt->bindValue(':idImage', 0);
+                    $stmt->execute();
+                    //Ajout du role d'artiste à l'utilisateur
+                    $stmt = $pdo->prepare("INSERT INTO A_ROLE (idUtilisateur, idRole, idArtiste) VALUES (:id, 1, :idArtiste)");
+                    $stmt->bindValue(':id', $idArtiste);
+                    $stmt->bindValue(':idArtiste', $idArtiste);
                     $stmt->execute();
                 }
 
