@@ -20,7 +20,7 @@ $content .= '
                         <option value="">Sélectionner un genre...</option>';
 
 foreach ($genres as $genre) {
-    $content .= '<option value="' . htmlspecialchars($genre->getIdGenre()) . '"' . ($filters['genre'] === $genre->getIdGenre() ? ' selected' : '') . '>' . htmlspecialchars($genre->getNomGenre()) . '</option>';
+    $content .= '<option value="' . htmlspecialchars($genre->getIdGenre()) . '"' . ($filters['genre'] == $genre->getIdGenre() ? ' selected' : '') . '>' . htmlspecialchars($genre->getNomGenre()) . '</option>';
 }
 $content .= '</select>
                 </div>
@@ -31,7 +31,7 @@ $content .= '</select>
                     <select class="form-select" name="artist">
                         <option value="">Sélectionner un artiste...</option>';
 foreach ($artists as $artist) {
-    $content .= '<option value="' . htmlspecialchars($artist->getIdArtiste()) . '"' . ($filters['artist'] === $artist->getIdArtiste() ? ' selected' : '') . '>' . htmlspecialchars($artist->getNomArtiste()) . '</option>';
+    $content .= '<option value="' . htmlspecialchars($artist->getIdArtiste()) . '"' . ($filters['artist'] == $artist->getIdArtiste() ? ' selected' : '') . '>' . htmlspecialchars($artist->getNomArtiste()) . '</option>';
 }
 $content .= '</select>
                 </div>
@@ -42,7 +42,7 @@ $content .= '</select>
                     <select class="form-select" name="year">
                         <option value="">Sélectionner une année...</option>';
 foreach ($years as $year) {
-    $content .= '<option value="' . htmlspecialchars(strval($year[0])) . '"' . ($filters['year'] === $year ? ' selected' : '') . '>' . htmlspecialchars(strval($year[0])) . '</option>';
+    $content .= '<option value="' . htmlspecialchars(strval($year[0])) . '"' . ($filters['year'] == strval($year[0]) ? ' selected' : '') . '>' . htmlspecialchars(strval($year[0])) . '</option>';
 }
 $content .= '</select>
                 </div>

@@ -3,7 +3,7 @@ $content = '<div class="container mb-3 rounded">
     <div class="row">
         <div class="col-md-4">';
 if ($super_album[0]['Image']) {
-    $content .= '<div class="card rounded-card mb-3"><img class="card-img-top img-fluid" src="data:image/jpeg;base64,' . mb_convert_encoding($super_album[0]['Image'][0]->getDataImage(), 'UTF-8', 'HTML-ENTITIES') . '" alt="' . $super_album[0]['Image'][0]->getNomImage() . '"></div>';
+    $content .= '<div class="card rounded-card mb-3"><img class="card-img-top img-fluid" src="data:image/jpeg;base64,' . utf8_decode($super_album[0]['Image'][0]->getDataImage()) . '" alt="' . $super_album[0]['Image'][0]->getNomImage() . '"></div>';
 }
 $content .= '</div>
         <div class="col-md-7 flex-grow-1">';
@@ -13,10 +13,10 @@ $content .= '</div>
         <p class="lead">' . $super_album[0]['Album']->getDescriptionAlbum() . '</p>
         <p class="lead">' . $super_album[0]['Artiste'][0]->getNomArtiste() . '</p>
         <p class="lead">' . $super_album[0]['Album']->getAnneeAlbum() . '</p>';
-        for($i = 0; $i < floor($super_album[0]['Note'][0]); $i++) {
+        for($i = 0; $i < floor($super_album[0]['Note'][0] ?? 0); $i++) {
             $content .= '<i class="bi bi-star-fill" style="font-size: 2em;"></i>';
         }
-        if($super_album[0]['Note'][0] - floor($super_album[0]['Note'][0]) > 0) {
+        if($super_album[0]['Note'][0] - floor($super_album[0]['Note'][0] ?? 0) > 0) {
             $content .= '<i class="bi bi-star-half" style="font-size: 2em;"></i>';
             $i++;   
         }
@@ -35,7 +35,7 @@ $content .= '</div></div></div></div>
             $content .= '<div class="card rounded-card text-dark mr-3 flex-grow-1 mb-3 mt-3">
                     <div class="card-body row">
                         <div class="col-md-2 no-padding">
-                            <img src="data:image/jpeg;base64,' . mb_convert_encoding($musique['Image'][0]->getDataImage(), 'UTF-8', 'HTML-ENTITIES') . '" alt="' . $musique['Musique']->getNomMusique() . '" class="img-fluid img-thumbnail small-image">
+                            <img src="data:image/jpeg;base64,' . utf8_decode($musique['Image'][0]->getDataImage()) . '" alt="' . $musique['Musique']->getNomMusique() . '" class="img-fluid img-thumbnail small-image">
                         </div>
                         <div class="col-md-8 no-padding">
                             <h5>' . $musique['Musique']->getNomMusique() . '</h5>
