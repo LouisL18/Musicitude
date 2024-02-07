@@ -31,8 +31,12 @@ class ArtistController {
     }
 
     public function detail(int $id) {
-        $artist = $this->artistFactory->getArtistById($id);
-        //albums ? + genres ? + ... ?
+        $artist = $this->artistFactory->getArtistById($id)[0];
+        $super_artist = [
+            'Artist' => $artist,
+            'Image' => $this->artistFactory->getImageByArtistId($artist->getIdArtiste()),
+            'Albums' => $this->albumFactory->getAlbumByArtist($artist->getIdArtiste()),
+        ];
         require_once 'app/Views/artist/detail.php';
     }
 
