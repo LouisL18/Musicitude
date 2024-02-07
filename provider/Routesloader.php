@@ -45,5 +45,6 @@ $router->post('/user', [$userController, 'create']);
 //$router->post('/logout', [$userController, 'logout']);
 $router->post('/register', [$userController, 'register']);
 $router->post('/albums/search', [$albumController, 'search']);
+$router->post('/albums', [$albumController, 'index']);
 
 $router->run();

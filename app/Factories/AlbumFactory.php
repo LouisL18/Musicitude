@@ -25,9 +25,9 @@ class AlbumFactory {
         return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Album::class, [intval('idAlbum'), 'nomAlbum', 'descriptionAlbum', intval('anneeAlbum'), intval('idArtiste'), intval('idImage')]);
     }
 
-    public function getAlbumByName($name) {
-        $stmt = $this->pdo->prepare('SELECT * FROM ALBUM WHERE nomAlbum = :nom');
-        $stmt->execute(['nom' => $name]);
+    public function getAlbumsByName($name) {
+        $stmt = $this->pdo->prepare('SELECT * FROM ALBUM WHERE nomAlbum LIKE :name');
+        $stmt->execute(['name' => '%'.$name.'%']);
         return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Album::class, [intval('idAlbum'), 'nomAlbum', 'descriptionAlbum', intval('anneeAlbum'), intval('idArtiste'), intval('idImage')]);
     }
 
@@ -99,6 +99,16 @@ class AlbumFactory {
         $stmt = $this->pdo->prepare('SELECT AVG(note) FROM NOTE WHERE idAlbum = :id');
         $stmt->execute(['id' => $id]);
         return $stmt->fetch();
+    }
+
+    public function getAllGenres() {
+        $stmt = $this->pdo->query('SELECT * FROM GENRE');
+        return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Genre::class, [intval('idGenre'), 'nomGenre', 'descriptionGenre']);
+    }
+
+    public function getAllYears() {
+        $stmt = $this->pdo->query('SELECT DISTINCT anneeAlbum FROM ALBUM');
+        return $stmt->fetchAll();
     }
 }
 ?>

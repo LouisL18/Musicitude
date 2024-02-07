@@ -16,21 +16,60 @@ class AlbumController {
         $this->userFactory = $userFactory;
     }
 
-    public function index() {
-        $albums = $this->albumFactory->getAllAlbums();
-        $super_albums = [];
-        foreach($albums as $album) {
-            $super_albums[] = [
-                'Album' => $album,
-                'Artiste' => $this->artistFactory->getArtistById($album->getIdArtiste()),
-                'Image' => $this->albumFactory->getImageById($album->getIdImage()),
-            ];
+    public function index(array|null $albums = null) {
+        //$albums = $this->albumFactory->getAllAlbums();
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            if ($albums != null) {
+                $super_albums = [];
+                foreach($albums as $album) {
+                    $super_albums[] = [
+                        'Album' => $album,
+                        'Artiste' => $this->artistFactory->getArtistById($album->getIdArtiste()),
+                        'Image' => $this->albumFactory->getImageById($album->getIdImage()),
+                    ];
+                }
+                global $main;
+                global $css;
+                $genres = $this->albumFactory->getAllGenres();
+                $artists = $this->artistFactory->getAllArtists();
+                $years = $this->albumFactory->getAllYears();
+                $main = require_once __DIR__ . '/../Views/album/index.php';
+                $css = 'albums';
+                require_once __DIR__ . '/../../public/index.php';
+            }
+            else {
+                return $this->index($this->albumFactory->getAllAlbums());
+            }
         }
-        global $main;
-        global $css;
-        $main = require_once __DIR__ . '/../Views/album/index.php';
-        $css = 'albums';
-        require_once __DIR__ . '/../../public/index.php';
+        elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $albums = $this->albumFactory->getAllAlbums();
+            if (isset($_POST['search']) && $_POST['search'] != '') {
+                $albums = array_filter($albums, function($album) {
+                    return strpos($album->getNomAlbum(), $_POST['search']) !== false;
+                });
+            }
+            elseif (isset($_POST['genre']) && $_POST['genre'] != '') {
+                $albums = array_filter($albums, function($album) {
+                    $album_genres = $this->albumFactory->getGenresByAlbum($album->getIdAlbum());
+                    foreach ($album_genres as $genre) {
+                        if ($genre->getIdGenre() == intval($_POST['genre'])) {
+                            return true;
+                        }
+                    }
+                });
+            }
+            elseif (isset($_POST['artist']) && $_POST['artist'] != '') {
+                $albums = array_filter($albums, function($album) {
+                    return $album->getIdArtiste() == intval($_POST['artist']);
+                });
+            }
+            elseif (isset($_POST['year']) && $_POST['year'] != '') {
+                $albums = array_filter($albums, function($album) {
+                    return $album->getAnneeAlbum() == intval($_POST['year']);
+                });
+            }
+            return $this->index($albums);
+        }
     }
 
     public function detail(int $id) {

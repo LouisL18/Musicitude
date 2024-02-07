@@ -1,5 +1,6 @@
 <?php
-$content = "<div class='row justify-content-center'>";
+$content = require_once __DIR__ . '/search.php';
+$content .= "<div class='row justify-content-center'>";
 $i = 0;
 foreach ($super_albums as $album) {
     if ($i % 5 == 0 && $i != 0) {
