@@ -49,7 +49,12 @@ class UserController {
     public function register() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_FILES['image']) and $_FILES['image']['error'] == 0) {
-                $image = base64_encode(file_get_contents($_FILES['image']['tmp_name']));
+                if ($_FILES['image']['size'] <= 1900000) {
+                    $image = base64_encode(file_get_contents($_FILES['image']['tmp_name']));
+                }
+                else {
+                    $image = base64_encode(file_get_contents('images/profile.png'));
+                }
             }
             else {
                 $image = base64_encode(file_get_contents('images/profile.png'));

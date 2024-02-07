@@ -45,7 +45,9 @@ class AlbumController {
             'Note' => $this->albumFactory->getNoteMoyenneByAlbum($album->getIdAlbum()),
         ]; 
         global $main;
+        global $css;
         $main = require_once __DIR__ . '/../Views/album/detail.php';
+        $css = '../../css/album';
         require_once __DIR__ .' /../../public/index.php';
     }
 

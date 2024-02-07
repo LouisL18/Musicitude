@@ -83,7 +83,16 @@ class AlbumFactory {
     public function getMusiquesByAlbum($id) {
         $stmt = $this->pdo->prepare('SELECT * FROM MUSIQUE NATURAL JOIN EST_CONSTITUE where idAlbum = :id');
         $stmt->execute(['id' => $id]);
-        return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Musique::class, [intval('idMusique'), 'nomMusique', 'descriptionMusique', 'idImage']);
+        $musiques = $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Musique::class, [intval('idMusique'), 'nomMusique', 'descriptionMusique', 'idImage']);
+        $musiques_images = [];
+        foreach ($musiques as $musique) {
+            $musiques_images[] = [
+                'Musique' => $musique,
+                'Image' => $this->getImageById($musique->getIdImage())
+            ];
+        }
+        return $musiques_images;
+
     }
 
     public function getNoteMoyenneByAlbum($id) {

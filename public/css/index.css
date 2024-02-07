@@ -43,7 +43,7 @@ body {
 }
 
 .navbar:after {
-    filter: blur(20px);
+    filter: blur(50px);
     border-radius: 15px;
 }
 
