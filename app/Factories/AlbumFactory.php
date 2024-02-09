@@ -49,17 +49,32 @@ class AlbumFactory {
         return true;
     }
 
-    public function updateAlbum(Album $album) {
-        $stmt = $this->pdo->prepare('UPDATE ALBUM SET nomAlbum = :nomAlbum, descriptionAlbum = :descriptionAlbum, anneeAlbum = :anneeAlbum, idArtiste = :idArtiste, idImage = :idImage WHERE idAlbum = :idAlbum');
+    public function updateAlbum(int $id, string $nom, string $description, int $annee, array|null $genres, string|null $image) {
+        $stmt = $this->pdo->prepare('UPDATE ALBUM SET nomAlbum = :nom, descriptionAlbum = :description, anneeAlbum = :annee WHERE idAlbum = :id');
         $stmt->execute([
-            'nomAlbum' => $album->getNomAlbum(),
-            'descriptionAlbum'=> $album->getDescriptionAlbum(),
-            'anneeAlbum' => $album->getAnneeAlbum(),
-            'idArtiste' => $album->getIdArtiste(),
-            'idImage' => $album->getIdImage(),
-            'idAlbum' => $album->getIdAlbum()
+            'id'=> $id,
+            'nom' => $nom,
+            'description' => $description,
+            'annee' => $annee
+        ]);
+        $stmt = $this->pdo->prepare('DELETE FROM EST_GENRE WHERE idAlbum = :id');
+        $stmt->execute([
+            'id'=> $id
+        ]);
+        foreach ($genres as $genre) {
+            $stmt = $this->pdo->prepare('INSERT INTO EST_GENRE (idAlbum, idGenre) VALUES (:idAlbum, :idGenre)');
+            $stmt->execute([
+                'idAlbum' => $id,
+                'idGenre' => intval($genre)
             ]);
-        return true;
+        }
+        if ($image != null) {
+            $stmt = $this->pdo->prepare('UPDATE IMAGE_BD SET dataImage = :data WHERE idImage = (SELECT idImage FROM ALBUM WHERE idAlbum = :id)');
+            $stmt->execute([
+                'id'=> $id,
+                'data' => $image
+            ]);
+        }
     }
 
     public function deleteAlbum($id) {
