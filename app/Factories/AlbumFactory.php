@@ -37,16 +37,62 @@ class AlbumFactory {
         return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Album::class, [intval('idAlbum'), 'nomAlbum', 'descriptionAlbum', intval('anneeAlbum'), intval('idArtiste'), intval('idImage')]);
     }
 
-    public function createAlbum(Album $album) {
-        $stmt = $this->pdo->prepare('INSERT INTO ALBUM (nomAlbum, descriptionAlbum, anneeAlbum, idArtiste, idImage) VALUES (:nomAlbum, :descriptionAlbum, :anneeAlbum, :idArtiste, :idImage)');
+    public function createAlbum(string $nom, string $description, int $annee, array|null $genres, array|null $noms_musiques, array|null $descriptions_musiques, array|null $images_musiques, string|null $image) {
+        $stmt = $this->pdo->query('SELECT COUNT(*) FROM IMAGE_BD');
+        $id_image_album = $stmt->fetch(PDO::FETCH_COLUMN) + 1;
+        $stmt = $this->pdo->prepare('INSERT INTO IMAGE_BD (idImage, nomImage, dataImage) VALUES (:idImage, :nomImage, :dataImage)');
         $stmt->execute([
-            'nomAlbum' => $album->getNomAlbum(),
-            'descriptionAlbum'=> $album->getDescriptionAlbum(),
-            'anneeAlbum' => $album->getAnneeAlbum(),
-            'idArtiste' => $album->getIdArtiste(),
-            'idImage' => $album->getIdImage()
+            'idImage' => $id_image_album,
+            'nomImage' => $id_image_album . '_image',
+            'dataImage' => $image
+        ]);
+        $stmt = $this->pdo->query('SELECT COUNT(*) FROM ALBUM');
+        $id_album = $stmt->fetch(PDO::FETCH_COLUMN) + 1;
+        $stmt = $this->pdo->prepare('INSERT INTO ALBUM (idAlbum, nomAlbum, descriptionAlbum, anneeAlbum, idArtiste, idImage) VALUES (:idAlbum, :nomAlbum, :descriptionAlbum, :anneeAlbum, :idArtiste, :idImage)');
+        $stmt->execute([
+            'idAlbum' => $id_album,
+            'nomAlbum' => $nom,
+            'descriptionAlbum' => $description,
+            'anneeAlbum' => $annee,
+            'idArtiste' => $_SESSION['artist_id'],
+            'idImage' => $id_image_album
+        ]);
+        foreach ($genres as $genre) {
+            $stmt = $this->pdo->prepare('INSERT INTO EST_GENRE (idAlbum, idGenre) VALUES (:idAlbum, :idGenre)');
+            $stmt->execute([
+                'idAlbum' => $id_album,
+                'idGenre' => intval($genre)
             ]);
-        return true;
+        }
+        //insert musiques
+        if ($noms_musiques != null) {
+            for ($i = 0; $i < count($noms_musiques); $i++) {
+                    $stmt = $this->pdo->query('SELECT COUNT(*) FROM IMAGE_BD');
+                    $id_image_musique = $stmt->fetch(PDO::FETCH_COLUMN) + 1;
+                    $stmt = $this->pdo->prepare('INSERT INTO IMAGE_BD (idImage, nomImage, dataImage) VALUES (:idImage, :nomImage, :dataImage)');
+                    
+                    $data_image = $images_musiques[$i] != "" ? base64_encode(file_get_contents($images_musiques[$i])) : base64_encode(file_get_contents(__DIR__ . '/../../public/images/default.jpg'));
+                    $stmt->execute([
+                        'idImage' => $id_image_musique,
+                        'nomImage' => $id_image_musique . '_image',
+                        'dataImage' => $data_image
+                    ]);
+                $stmt = $this->pdo->query('SELECT COUNT(*) FROM MUSIQUE');
+                $id_musique = $stmt->fetch(PDO::FETCH_COLUMN) + 1;
+                $stmt = $this->pdo->prepare('INSERT INTO MUSIQUE (idMusique, nomMusique, descriptionMusique, idImage) VALUES (:idMusique, :nomMusique, :descriptionMusique, :idImage)');
+                $stmt->execute([
+                    'idMusique' => $id_musique,
+                    'nomMusique' => $noms_musiques[$i],
+                    'descriptionMusique' => $descriptions_musiques[$i],
+                    'idImage' => $id_image_musique
+                ]);
+                $stmt = $this->pdo->prepare('INSERT INTO EST_CONSTITUE (idAlbum, idMusique) VALUES (:idAlbum, :idMusique)');
+                $stmt->execute([
+                    'idAlbum' => $id_album,
+                    'idMusique' => $id_musique
+                ]);
+            }
+        }
     }
 
     public function updateAlbum(int $id, string $nom, string $description, int $annee, array|null $genres, string|null $image) {

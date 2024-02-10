@@ -156,6 +156,23 @@ class AlbumController {
     }
 
     public function create() {
-        return null;
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            if (isset($_SESSION['artist_id'])) {
+                $artist = $this->artistFactory->getArtistById($_SESSION['artist_id'])[0];
+                global $main;
+                global $css;
+                $all_genres = $this->albumFactory->getAllGenres();
+                $main = require_once __DIR__ . '/../Views/album/create.php';
+                $css = '../../css/album';
+                require_once __DIR__ . '/../../public/index.php';
+            }
+            else {
+                die('Vous n\'êtes pas un artiste');
+            }
+        }
+        elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->albumFactory->createAlbum($_POST['nomAlbum'], $_POST['descriptionAlbum'], $_POST['anneeAlbum'], isset($_POST['genres']) ? $_POST['genres'] : null, isset($_POST['musicName']) && count($_POST['musicName']) > 0 && $_POST['musicName'][0] != '' ? $_POST['musicName'] : null, isset($_POST['musicDescription']) ? $_POST['musicDescription'] : null, isset($_FILES['musicImage']) ? $_FILES['musicImage']['tmp_name'] : null, $_FILES['imageAlbum']['size'] > 0 && $_FILES['imageAlbum']['size'] <= 1900000 ? base64_encode(file_get_contents($_FILES['imageAlbum']['tmp_name'])) : null);
+            header('Location: /albums');
+        }
     }
 }

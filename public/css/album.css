@@ -59,7 +59,7 @@
 
 .scrollable {
     max-height: 800px;
-    overflow-x: scroll;
+    overflow-x: hidden;
 }
 .small-image {
     width: 100px; /* adjust as needed */

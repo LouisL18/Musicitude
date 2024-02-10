@@ -1,27 +1,24 @@
 <?php
 if (isset($_SESSION['user_id'])) {
     if (isset($_SESSION['artist_id'])) {
-        $add_album = '<li><a class="dropdown-item" href="/albums/create">Ajouter un album</a></li>';
+        $add_album = '<li><a class="dropdown-item" href="/album/create">Ajouter un album</a></li>';
     } else {
         $add_album = '';
     }
     $albums_dropdown = <<<HTML
     <ul class="dropdown-menu bg-secondary" aria-labelledby="dropdownMenuLink">
         <li><a class="dropdown-item" href="/albums">Tous les albums</a></li>
-        <li><a class="dropdown-item" href="/albums/search">Rechercher des albums</a></li>
         $add_album
     </ul>
     HTML;
     $artists_dropdown = <<<HTML
     <ul class="dropdown-menu bg-secondary" aria-labelledby="dropdownMenuLink">
         <li><a class="dropdown-item" href="/artists">Tous les artistes</a></li>
-        <li><a class="dropdown-item" href="/artists/search">Rechercher des artistes</a></li>
     </ul>
     HTML;
     $profile_dropdown = <<<HTML
     <ul class="dropdown-menu bg-secondary" aria-labelledby="dropdownMenuLink">
         <li><a class="dropdown-item" href="/user">Mon profil</a></li>
-        <li><a class="dropdown-item" href="#">Modifier mon profil</a></li>
         <li><a class="dropdown-item" href="/logout">Se déconnecter</a></li>
     </ul>
     HTML;

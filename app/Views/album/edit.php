@@ -4,7 +4,7 @@ if (isset($_SESSION['artist_id']) && $super_album[0]['Artiste'][0]->getIdArtiste
 }
 $id = $_SESSION['edit_id'];
 $content = <<<HTML
-<form action="/album/$id" method="post" class="container mb-3 rounded" enctype="multipart/form-data">; 
+<form action="/album/$id" method="post" class="container mb-3 rounded" enctype="multipart/form-data">
 HTML;
 $content .= '<div class="row">';
 $content .= '<div class="col-md-4">';
@@ -62,7 +62,7 @@ foreach ($super_album[0]['Musiques'] as $musique) {
 }
 $content .= '</div>';
 $content .= '</div>';
-$content .= '<input type="submit" value="Mettre à jour" class="position-fixed btn btn-primary" style="bottom: 1vh; right: 1vw;">';
+$content .= '<input type="submit" value="Mettre à jour" class="position-fixed btn btn-primary" style="width: auto; bottom: 1vh; right: 1vw;">';
 $content .= '</form>';
 $content .= <<<HTML
 <script>
