@@ -17,20 +17,80 @@ class AlbumController {
     }
 
     public function index() {
-        $albums = $this->albumFactory->getAllAlbums();
-        $super_albums = [];
-        foreach($albums as $album) {
-            $super_albums[] = [
-                'Album' => $album,
-                'Artiste' => $this->artistFactory->getArtistById($album->getIdArtiste()),
-                'Image' => $this->albumFactory->getImageById($album->getIdImage()),
-            ];
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            $albums = $this->albumFactory->getAllAlbums();
+            $super_albums = [];
+            foreach($albums as $album) {
+                $super_albums[] = [
+                    'Album' => $album,
+                    'Artiste' => $this->artistFactory->getArtistById($album->getIdArtiste()),
+                    'Image' => $this->albumFactory->getImageById($album->getIdImage()),
+                ];
+            }
+            global $main;
+            global $css;
+            $genres = $this->albumFactory->getAllGenres();
+            $artists = $this->artistFactory->getAllArtists();
+            $years = $this->albumFactory->getAllYears();
+            $filters = $filters ?? ['search' => '', 'genre' => '', 'artist' => '', 'year' => ''];
+            $main = require_once __DIR__ . '/../Views/album/index.php';
+            $css = 'albums';
+            require_once __DIR__ . '/../../public/index.php';
         }
-        global $main;
-        global $css;
-        $main = require_once __DIR__ . '/../Views/album/index.php';
-        $css = 'albums';
-        require_once __DIR__ . '/../../public/index.php';
+        elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $albums = $this->albumFactory->getAllAlbums();
+            $filters = ['search' => '', 'genre' => '', 'artist' => '', 'year' => ''];
+            if (isset($_POST['search']) && $_POST['search'] != '') {
+                $filters['search'] = $_POST['search'];
+                $search = $_POST['search'];
+                $albums = array_filter($albums, function($album) use ($search) {
+                    return stripos($album->getNomAlbum(), $search) !== false;
+                });
+            }
+            if (isset($_POST['genre']) && $_POST['genre'] != '') {
+                $filters['genre'] = $_POST['genre'];
+                $genre = intval($_POST['genre']);
+                $albums = array_filter($albums, function($album) use ($genre) {
+                    $album_genres = $this->albumFactory->getGenresByAlbum($album->getIdAlbum());
+                    foreach ($album_genres as $album_genre) {
+                        if ($album_genre->getIdGenre() == $genre) {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+            }
+            if (isset($_POST['artist']) && $_POST['artist'] != '') {
+                $filters['artist'] = $_POST['artist'];
+                $artist = intval($_POST['artist']);
+                $albums = array_filter($albums, function($album) use ($artist) {
+                    return $album->getIdArtiste() == $artist;
+                });
+            }
+            if (isset($_POST['year']) && $_POST['year'] != '') {
+                $filters['year'] = $_POST['year'];
+                $year = intval($_POST['year']);
+                $albums = array_filter($albums, function($album) use ($year) {
+                    return $album->getAnneeAlbum() == $year;
+                });
+            }
+            global $main;
+            global $css;
+            $super_albums = [];
+            foreach($albums as $album) {
+                $super_albums[] = [
+                    'Album' => $album,
+                    'Artiste' => $this->artistFactory->getArtistById($album->getIdArtiste()),
+                    'Image' => $this->albumFactory->getImageById($album->getIdImage()),
+                ];
+            }
+            $genres = $this->albumFactory->getAllGenres();
+            $artists = $this->artistFactory->getAllArtists();
+            $years = $this->albumFactory->getAllYears();
+            $main = require_once __DIR__ . '/../Views/album/index.php';
+            $css = 'albums';
+            require_once __DIR__ . '/../../public/index.php';
+        }
     }
 
     public function detail(int $id) {
@@ -45,7 +105,9 @@ class AlbumController {
             'Note' => $this->albumFactory->getNoteMoyenneByAlbum($album->getIdAlbum()),
         ]; 
         global $main;
+        global $css;
         $main = require_once __DIR__ . '/../Views/album/detail.php';
+        $css = '../../css/album';
         require_once __DIR__ .' /../../public/index.php';
     }
 
