@@ -72,5 +72,11 @@ class ArtistFactory {
         $stmt->execute(['id' => $idImage]);
         return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Image::class, [$idImage, 'nomImage', 'urlImage']);
     }
+
+    public function getArtisteByAlbum($id_album) {
+        $stmt = $this->pdo->prepare('SELECT * FROM ARTISTE WHERE idArtiste = (SELECT idArtiste FROM ALBUM WHERE idAlbum = :id_album)');
+        $stmt->execute(['id_album' => $id_album]);
+        return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Artist::class, [intval('idArtiste'), 'nomArtiste', 'descriptionArtiste']);
+    }
 }
 ?>

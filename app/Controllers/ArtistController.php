@@ -26,14 +26,25 @@ class ArtistController {
             ];
         }
         global $main;
-        $main = require_once __DIR__.'/../Views/artist/index.php';
-        require_once __DIR__.'/../../public/index.php';
+        global $css;
+        $main = require_once __DIR__ . '/../Views/artist/index.php';
+        $css = 'artists';
+        require_once __DIR__ . '/../../public/index.php';
     }
 
     public function detail(int $id) {
-        $artist = $this->artistFactory->getArtistById($id);
-        //albums ? + genres ? + ... ?
+        $artist = $this->artistFactory->getArtistById($id)[0];
+        $super_artist = [
+            'Artist' => $artist,
+            'Image' => $this->artistFactory->getImageByArtistId($artist->getIdArtiste()),
+            'Albums' => $this->albumFactory->getAlbumByArtist($artist->getIdArtiste()),
+        ];
         require_once 'app/Views/artist/detail.php';
+        global $main;
+        global $css;
+        $main = require_once __DIR__ . '/../Views/artist/detail.php';
+        $css = '../../css/artist';
+        require_once __DIR__ . '/../../public/index.php';
     }
 
     public function update(int $id) {

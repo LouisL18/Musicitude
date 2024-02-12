@@ -162,6 +162,11 @@ class AlbumFactory {
         return $stmt->fetch();
     }
 
+    public function getAlbumByMusique($id) {
+        $stmt = $this->pdo->prepare('SELECT * FROM ALBUM WHERE idAlbum = (SELECT idAlbum FROM EST_CONSTITUE WHERE idMusique = :id)');
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Album::class, [intval('idAlbum'), 'nomAlbum', 'descriptionAlbum', intval('anneeAlbum'), intval('idArtiste'), intval('idImage')]);
+
     public function getAllGenres() {
         $stmt = $this->pdo->query('SELECT * FROM GENRE');
         return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Genre::class, [intval('idGenre'), 'nomGenre', 'descriptionGenre']);
