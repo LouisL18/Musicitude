@@ -27,7 +27,11 @@ $content .= '</div>
         foreach($super_album[0]['Genres'] as $genre) {
             $content .= '<div class="alert alert-secondary m-1" role="alert">' . $genre->getNomGenre() . '</div>';
         }
-$content .= '</div></div></div></div>
+$content .= '</div></div>';
+if (isset($_SESSION['artist_id']) && $super_album[0]['Artiste'][0]->getIdArtiste() == $_SESSION['artist_id']) {
+    $content .= '<a href="/album/' . $super_album[0]['Album']->getIdAlbum() . '/edit" class="btn btn-primary rounded-pill">Modifier</a>';
+}
+$content .= '</div></div>
     <div class="row mt-4">
         <h3 class="display-5 text-white">Titres</h3>
         <div class="col-md-12 scrollable mb-3 rounded pr-5 pl-5">';
