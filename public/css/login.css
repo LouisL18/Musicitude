@@ -1,6 +1,14 @@
 .rounded-card {
     border-radius: 15px;
 }
+.container{
+    margin-top: 5%;
+}
+.logo-div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 .rounded-card:before, .rounded-card:after {
     content: '';

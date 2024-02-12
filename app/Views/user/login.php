@@ -6,6 +6,9 @@ $content = <<<HTML
     <div class="col-lg-8 offset-lg-2">
       <div class="card rounded-card bg-secondary">
         <div class="card-body">
+          <div class="logo-div">
+            <img src="images/logo.png" alt="Musicitude Logo" class="logo">
+          </div>
           <h2 class="mt-2">Se connecter</h2>
           <form action="/login" method="post">
             <div class="form-group mt-2">
