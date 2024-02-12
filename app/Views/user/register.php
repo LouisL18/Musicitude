@@ -17,7 +17,10 @@ $content = <<<HTML
     <div class="col-lg-8 offset-lg-2">
       <div class="card rounded-card bg-secondary">
         <div class="card-body">
-          <h2 class="mt-2">Créer un compte</h2>
+          <div class="title">
+            <h2 class="mt-2">Créer un compte</h2>
+            <img src="images/logo.png" alt="Musicitude Logo" class="logo">
+          </div>
           <form action="/register" method="post" enctype="multipart/form-data">
             <div class="form-group">
               <label for="prenom">Nom</label>

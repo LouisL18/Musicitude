@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once __DIR__ . '../../provider/Routesloader.php';
-$header = require_once __DIR__ . '/components/header.php';
+$header = '';
 global $main;
 if (isset($css)) {
     $css = "<link rel='stylesheet' href='css/$css.css'>";
@@ -12,6 +12,12 @@ else {
 if (!isset($_SESSION['user_id']) and $_SERVER['REQUEST_URI'] != '/register' and $_SERVER['REQUEST_URI'] != '/login') {
     header('Location: /login');
 }
+
+if ($_SERVER['REQUEST_URI'] != '/login' && $_SERVER['REQUEST_URI'] != '/register') {
+    $header = require_once __DIR__ . '/components/header.php';
+}
+
+
 ?>
 
 <DOCTYPE html>
