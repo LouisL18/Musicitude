@@ -4,15 +4,18 @@ namespace app\Controllers;
 use app\Factories\AlbumFactory;
 use app\Factories\UserFactory;
 use app\Factories\PlaylistFactory;
+use app\Factories\ArtistFactory;
 class PlaylistController {
     protected $playlistFactory;
     protected $userFactory;
     protected $albumFactory;
+    protected $artistFactory;
 
-    public function __construct(PlaylistFactory $playlistFactory, UserFactory $userFactory, AlbumFactory $albumFactory) {
+    public function __construct(PlaylistFactory $playlistFactory, UserFactory $userFactory, AlbumFactory $albumFactory, ArtistFactory $artistFactory) {
         $this->playlistFactory = $playlistFactory;
         $this->userFactory = $userFactory;
         $this->albumFactory = $albumFactory;
+        $this->artistFactory = $artistFactory;
     }
 
     public function index() {
@@ -35,9 +38,18 @@ class PlaylistController {
 
     public function detail(int $id) {
         $playlist = $this->playlistFactory->getPlaylistById($id)[0];
+        $supers_musiques = [];
+        foreach ($this->playlistFactory->getMusiquesByPlaylist($playlist->getIdPlaylist()) as $musique) {
+            $supers_musiques[] = [
+                'Musique' => $musique,
+                'Album' => $this->albumFactory->getAlbumByMusique($musique->getIdMusique())[0],
+                'Artiste' => $this->artistFactory->getArtisteByAlbum($this->albumFactory->getAlbumById($musique->getIdAlbum())[0]->getIdAlbum())[0],
+                'Image' => $this->albumFactory->getImageById($musique->getIdImage()),
+            ];
+        }
         $super_playlist = [
             'Playlist' => $playlist,
-            'Musiques' => $this->playlistFactory->getMusiquesByPlaylist($playlist->getIdPlaylist()),
+            'Musiques' => $supers_musiques,
         ];
         global $main;
         global $css;
