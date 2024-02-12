@@ -26,7 +26,7 @@ class User {
         return $this->nomUtilisateur;
     }
 
-    public function getPenomUtilisateur(): string {
+    public function getPrenomUtilisateur(): string {
         return $this->prenomUtilisateur;
     }
 

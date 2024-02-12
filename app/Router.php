@@ -41,6 +41,12 @@ class Router
             if ($route === $uri_implode) {
                 $uri_explode = explode('/', $uri);
                 $id = end($uri_explode);
+                while (!is_numeric($id)) {
+                    $id = prev($uri_explode);
+                    if ($id === false) {
+                        break;
+                    }
+                }
                 if (is_numeric($id)) {
                     call_user_func_array($this->routes[$method][$uri_implode], [$id]);
                 } else {
@@ -52,7 +58,7 @@ class Router
         }
         if (!$found) {
             header("HTTP/1.0 404 Not Found");
-            echo '<h1>404 Not Found</h1>';
+            die("404 Not Found");
         }
     }
 }

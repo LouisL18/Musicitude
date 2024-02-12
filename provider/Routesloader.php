@@ -29,6 +29,8 @@ $router->get('/artists', [$artistController, 'index']);
 $router->get('/artist/{id}', [$artistController, 'detail']);
 $router->get('/user', [$userController, 'profile']);
 $router->get('/albums/search', [$albumController, 'search']);
+$router->get('/album/{id}/edit', [$albumController, 'edit']);
+$router->get('/album/create', [$albumController, 'create']);
 
 $router->put('/album/{id}', [$albumController, 'update']);
 $router->put('/artist/{id}', [$artistController, 'update']);
@@ -39,11 +41,13 @@ $router->delete('/artist/{id}', [$artistController, 'delete']);
 $router->delete('/user/{id}', [$userController, 'delete']);
 
 $router->post('/login', [$userController, 'login']);
-$router->post('/album', [$albumController, 'create']);
+$router->post('/album/create', [$albumController, 'create']);
 $router->post('/artist', [$artistController, 'create']);
 $router->post('/user', [$userController, 'create']);
 //$router->post('/logout', [$userController, 'logout']);
 $router->post('/register', [$userController, 'register']);
 $router->post('/albums/search', [$albumController, 'search']);
+$router->post('/albums', [$albumController, 'index']);
+$router->post('/album/{id}', [$albumController, 'detail']);
 
 $router->run();
