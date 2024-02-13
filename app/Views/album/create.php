@@ -57,9 +57,9 @@ $content .= '<input type="text" class="form-control" id="musicName[]" name="musi
 $content .= '</div>';
 $content .= '<div class="col-md-4 no-padding">';
 $content .= '<label for="musicDescription[]" class="form-label">Description</label>';
-$content .= '<textarea class="form-control" id="musicDescription[]" name="musicDescription[]"></textarea>';
+$content .= '<textarea rows="1" class="form-control" id="musicDescription[]" name="musicDescription[]"></textarea>';
 $content .= '</div>';
-$content .= '<div class="col-md-1 d-flex no-padding">';
+$content .= '<div class="col-md-1 d-flex no-padding justify-content-center align-items-center">';
 $content .= '<button type="button" class="btn btn-danger" onclick="deleteMusic(this)">Supprimer</button>';
 $content .= '</div>';
 $content .= '</div>';
