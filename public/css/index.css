@@ -62,7 +62,7 @@ body {
     display: block;
 }
 
-.dropdown-menu {
+header .dropdown-menu {
     left: 50%;
     transform: translateX(-50%);
     background-color: white;

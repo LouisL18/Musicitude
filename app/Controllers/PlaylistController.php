@@ -5,6 +5,7 @@ use app\Factories\AlbumFactory;
 use app\Factories\UserFactory;
 use app\Factories\PlaylistFactory;
 use app\Factories\ArtistFactory;
+
 class PlaylistController {
     protected $playlistFactory;
     protected $userFactory;
@@ -64,6 +65,11 @@ class PlaylistController {
         elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
         }
         require_once 'app/Views/playlist/search.php';
+    }
+
+    public function add(int $idPlaylist, int $idMusique) {
+        $this->playlistFactory->addMusiqueToPlaylist($idPlaylist, $idMusique);
+        http_response_code(200);
     }
 }
 ?>

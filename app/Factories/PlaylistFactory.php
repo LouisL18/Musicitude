@@ -30,9 +30,20 @@ class PlaylistFactory {
     }
 
     public function getMusiquesByPlaylist($id) {
-        $stmt = $this->pdo->prepare('SELECT * FROM MUSIQUE WHERE idPlaylist = :id');
+        $stmt = $this->pdo->prepare('SELECT * FROM MUSIQUE WHERE idMusique IN (SELECT idMusique FROM EST_DANS WHERE idPlaylist = :id)');
         $stmt->execute(['id' => $id]);
         return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Musique::class, [intval('idMusique'), 'nomMusique', 'descriptionMusique', 'idImage']);
     }
+
+    public function getPlaylistsByUser(int $id) {
+        $stmt = $this->pdo->prepare('SELECT * FROM PLAYLIST WHERE idPlaylist IN (SELECT idPlaylist FROM A_PLAYLIST WHERE idUtilisateur = :id)');
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Playlist::class, [intval('idPlaylist'), 'nomPlaylist', 'idUtilisateur']);
+    }
+
+    public function addMusiqueToPlaylist(int $idPlaylist, int $idMusique) {
+        $stmt = $this->pdo->prepare('INSERT INTO EST_DANS (idPlaylist, idMusique) VALUES (:idPlaylist, :idMusique)');
+        $stmt->execute(['idPlaylist' => $idPlaylist, 'idMusique' => $idMusique]);
+    }
 }
-?>
+?> 

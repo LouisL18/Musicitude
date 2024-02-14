@@ -62,7 +62,15 @@
     overflow-x: hidden;
 }
 .small-image {
-    width: 100px; /* adjust as needed */
-    height: 100px; /* adjust as needed */
+    width: 100px;
+    height: 100px;
     object-fit: cover;
+}
+
+.detail {
+    left : -50%;
+    transform: translateX(-54%);
+    background-color: white;
+    border-radius: 15px 0px 15px 15px; 
+    text-align: center;
 }
