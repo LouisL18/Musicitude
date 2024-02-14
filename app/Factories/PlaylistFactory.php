@@ -45,5 +45,11 @@ class PlaylistFactory {
         $stmt = $this->pdo->prepare('INSERT INTO EST_DANS (idPlaylist, idMusique) VALUES (:idPlaylist, :idMusique)');
         $stmt->execute(['idPlaylist' => $idPlaylist, 'idMusique' => $idMusique]);
     }
+
+    public function getUserIdByPlaylist(int $id) {
+        $stmt = $this->pdo->prepare('SELECT idUtilisateur FROM A_PLAYLIST WHERE idPlaylist = :id');
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch(PDO::FETCH_COLUMN);
+    }
 }
 ?> 

@@ -34,6 +34,8 @@ $router->get('/user', [$userController, 'profile']);
 $router->get('/albums/search', [$albumController, 'search']);
 $router->get('/album/{id}/edit', [$albumController, 'edit']);
 $router->get('/album/create', [$albumController, 'create']);
+$router->get('/playlists', [$playlistController, 'index']);
+$router->get('/playlist/{id}', [$playlistController, 'detail']);
 
 $router->put('/album/{id}', [$albumController, 'update']);
 $router->put('/artist/{id}', [$artistController, 'update']);
