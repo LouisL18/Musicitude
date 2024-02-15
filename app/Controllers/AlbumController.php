@@ -97,6 +97,9 @@ class AlbumController {
     }
 
     public function detail(int $id, bool $force = false) {
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: /login');
+        }
         if ($_SERVER['REQUEST_METHOD'] === 'GET' || $force) {
             $album = $this->albumFactory->getAlbumById($id)[0];
             $super_album = [];
