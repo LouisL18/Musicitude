@@ -177,5 +177,15 @@ class AlbumFactory {
         $stmt = $this->pdo->query('SELECT DISTINCT anneeAlbum FROM ALBUM');
         return $stmt->fetchAll();
     }
+
+    public function getImagesByMusiques($musiques) {
+        $images = [];
+        foreach ($musiques as $musique) {
+            $stmt = $this->pdo->prepare('SELECT * FROM IMAGE_BD WHERE idImage = (SELECT idImage FROM MUSIQUE WHERE idMusique = :id)');
+            $stmt->execute(['id' => $musique->getIdMusique()]);
+            $images[] = $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Image::class, [intval('idImage'), 'nomImage', 'dataImage']);
+        }
+        return $images;
+    }
 }
 ?>

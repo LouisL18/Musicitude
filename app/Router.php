@@ -47,7 +47,16 @@ class Router
                         break;
                     }
                 }
-                if (is_numeric($id)) {
+                $secondId = prev($uri_explode);
+                while (!is_numeric($secondId)) {
+                    $secondId = prev($uri_explode);
+                    if ($secondId === false) {
+                        break;
+                    }
+                }
+                if (is_numeric($secondId)) {
+                    call_user_func_array($this->routes[$method][$uri_implode], [$secondId, $id]);
+                } else if (is_numeric($id)) {
                     call_user_func_array($this->routes[$method][$uri_implode], [$id]);
                 } else {
                     call_user_func($this->routes[$method][$uri_implode]);

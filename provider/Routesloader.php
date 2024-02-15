@@ -12,10 +12,13 @@ use app\Factories\ArtistFactory;
 use app\Controllers\ArtistController;
 use app\Factories\UserFactory;
 use app\Controllers\UserController;
+use app\Factories\PlaylistFactory;
+use app\Controllers\PlaylistController;
 
-$albumController = new AlbumController(new AlbumFactory(DatabaseProvider::getDataBase()), new ArtistFactory(DatabaseProvider::getDataBase()), new UserFactory(DatabaseProvider::getDataBase()));
+$albumController = new AlbumController(new AlbumFactory(DatabaseProvider::getDataBase()), new ArtistFactory(DatabaseProvider::getDataBase()), new UserFactory(DatabaseProvider::getDataBase()), new PlaylistFactory(DatabaseProvider::getDataBase()));
 $artistController = new ArtistController(new ArtistFactory(DatabaseProvider::getDataBase()), new AlbumFactory(DatabaseProvider::getDataBase()), new UserFactory(DatabaseProvider::getDataBase()));
 $userController = new UserController(new UserFactory(DatabaseProvider::getDataBase()), new ArtistFactory(DatabaseProvider::getDataBase()));
+$playlistController = new PlaylistController(new PlaylistFactory(DatabaseProvider::getDataBase()), new UserFactory(DatabaseProvider::getDataBase()), new AlbumFactory(DatabaseProvider::getDataBase()), new ArtistFactory(DatabaseProvider::getDataBase()));
 
 $router = new Router();
 
@@ -31,10 +34,13 @@ $router->get('/user', [$userController, 'profile']);
 $router->get('/albums/search', [$albumController, 'search']);
 $router->get('/album/{id}/edit', [$albumController, 'edit']);
 $router->get('/album/create', [$albumController, 'create']);
+$router->get('/playlists', [$playlistController, 'index']);
+$router->get('/playlist/{id}', [$playlistController, 'detail']);
 
 $router->put('/album/{id}', [$albumController, 'update']);
 $router->put('/artist/{id}', [$artistController, 'update']);
 $router->put('/user/{id}', [$userController, 'update']);
+$router->put('/playlist/{id}/add/{id}', [$playlistController, 'add']);
 
 $router->delete('/album/{id}', [$albumController, 'delete']);
 $router->delete('/artist/{id}', [$artistController, 'delete']);

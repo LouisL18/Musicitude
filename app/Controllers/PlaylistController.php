@@ -5,6 +5,7 @@ use app\Factories\AlbumFactory;
 use app\Factories\UserFactory;
 use app\Factories\PlaylistFactory;
 use app\Factories\ArtistFactory;
+
 class PlaylistController {
     protected $playlistFactory;
     protected $userFactory;
@@ -19,14 +20,13 @@ class PlaylistController {
     }
 
     public function index() {
-        $playlists = $this->playlistFactory->getAllPlaylists();
+        $playlists = $this->playlistFactory->getPlaylistsByUser($_SESSION['user_id']);
         $super_playlists = [];
         foreach ($playlists as $playlist) {
-            $musique1 = $this->playlistFactory->getMusiquesByPlaylist($playlist->getIdPlaylist())[0];
             $super_playlists[] = [
                 'Playlist' => $playlist,
                 'NbMusiques' => count($this->playlistFactory->getMusiquesByPlaylist($playlist->getIdPlaylist())),
-                'Image' => $this->albumFactory->getImageById($musique1->getIdImage()),
+                'Images' => $this->albumFactory->getImagesByMusiques($this->playlistFactory->getMusiquesByPlaylist($playlist->getIdPlaylist())),
             ];
         }
         global $main;
@@ -37,20 +37,26 @@ class PlaylistController {
     }
 
     public function detail(int $id) {
-        $playlist = $this->playlistFactory->getPlaylistById($id)[0];
-        $supers_musiques = [];
-        foreach ($this->playlistFactory->getMusiquesByPlaylist($playlist->getIdPlaylist()) as $musique) {
-            $supers_musiques[] = [
-                'Musique' => $musique,
-                'Album' => $this->albumFactory->getAlbumByMusique($musique->getIdMusique())[0],
-                'Artiste' => $this->artistFactory->getArtisteByAlbum($this->albumFactory->getAlbumById($musique->getIdAlbum())[0]->getIdAlbum())[0],
-                'Image' => $this->albumFactory->getImageById($musique->getIdImage()),
-            ];
+        // $playlist = $this->playlistFactory->getPlaylistById($id)[0];
+        // $supers_musiques = [];
+        // foreach ($this->playlistFactory->getMusiquesByPlaylist($playlist->getIdPlaylist()) as $musique) {
+        //     $supers_musiques[] = [
+        //         'Musique' => $musique,
+        //         'Album' => $this->albumFactory->getAlbumByMusique($musique->getIdMusique())[0],
+        //         'Artiste' => $this->artistFactory->getArtisteByAlbum($this->albumFactory->getAlbumById($musique->getIdAlbum())[0]->getIdAlbum())[0],
+        //         'Image' => $this->albumFactory->getImageById($musique->getIdImage()),
+        //     ];
+        // }
+        // $super_playlist = [
+        //     'Playlist' => $playlist,
+        //     'Musiques' => $supers_musiques,
+        // ];
+        if ($_SESSION['user_id'] == $this->playlistFactory->getUserIdByPlaylist($id)) {
+            echo 'ok';
         }
-        $super_playlist = [
-            'Playlist' => $playlist,
-            'Musiques' => $supers_musiques,
-        ];
+        else {
+            die('Vous n\'êtes pas l\'auteur de cette playlist');
+        }
         global $main;
         global $css;
         $main = require_once __DIR__ . '/../Views/playlist/detail.php';
@@ -64,6 +70,11 @@ class PlaylistController {
         elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
         }
         require_once 'app/Views/playlist/search.php';
+    }
+
+    public function add(int $idPlaylist, int $idMusique) {
+        $this->playlistFactory->addMusiqueToPlaylist($idPlaylist, $idMusique);
+        http_response_code(200);
     }
 }
 ?>

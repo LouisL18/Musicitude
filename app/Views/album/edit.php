@@ -1,5 +1,5 @@
 <?php
-if (isset($_SESSION['artist_id']) && $super_album[0]['Artiste'][0]->getIdArtiste() != $_SESSION['artist_id']) {
+if (isset($_SESSION['artist_id']) && $super_album[0]['Artiste'][0]->getIdArtiste() != $_SESSION['artist_id'] || !isset($_SESSION['artist_id'])) {
     die('Vous n\'avez pas les droits pour modifier cet album');
 }
 $id = $_SESSION['edit_id'];

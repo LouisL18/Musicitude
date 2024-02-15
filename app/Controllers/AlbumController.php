@@ -4,16 +4,19 @@ namespace app\Controllers;
 use app\Factories\AlbumFactory;
 use app\Factories\ArtistFactory;
 use app\Factories\UserFactory;
+use app\Factories\PlaylistFactory;
 
 class AlbumController {
     protected $albumFactory;
     protected $artistFactory;
     protected $userFactory;
+    protected $playlistFactory;
 
-    public function __construct(AlbumFactory $albumFactory, ArtistFactory $artistFactory, UserFactory $userFactory) {
+    public function __construct(AlbumFactory $albumFactory, ArtistFactory $artistFactory, UserFactory $userFactory, PlaylistFactory $playlistFactory) {
         $this->albumFactory = $albumFactory;
         $this->artistFactory = $artistFactory;
         $this->userFactory = $userFactory;
+        $this->playlistFactory = $playlistFactory;
     }
 
     public function index() {
@@ -107,6 +110,14 @@ class AlbumController {
             ]; 
             global $main;
             global $css;
+            $playlists = $this->playlistFactory->getPlaylistsByUser($_SESSION['user_id']);
+            $super_playlist = [];
+            foreach($playlists as $playlist) {
+                $super_playlist[] = [
+                    'Playlist' => $playlist,
+                    'Musiques' => $this->playlistFactory->getMusiquesByPlaylist($playlist->getIdPlaylist()),
+                ];
+            }
             $main = require_once __DIR__ . '/../Views/album/detail.php';
             $css = '../../css/album';
             require_once __DIR__ .' /../../public/index.php';
