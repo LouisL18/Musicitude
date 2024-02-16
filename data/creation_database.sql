@@ -62,6 +62,7 @@ CREATE TABLE MUSIQUE (
     idMusique int,
     nomMusique varchar(255),
     descriptionMusique varchar(255),
+    dataMusique blob,
     idImage int,
     constraint pk_musique primary key (idMusique),
     constraint fk_musique_image foreign key (idImage) references IMAGE_BD (idImage)

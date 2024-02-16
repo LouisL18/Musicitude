@@ -126,7 +126,7 @@ class AlbumController {
             require_once __DIR__ .' /../../public/index.php';
         }
         elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->albumFactory->updateAlbum($id, $_POST['nomAlbum'], $_POST['descriptionAlbum'], $_POST['anneeAlbum'], isset($_POST['genres']) ? $_POST['genres'] : null, $_FILES['image']['size'] > 0 && $_FILES['image']['size'] <= 1900000 ? base64_encode(file_get_contents($_FILES['image']['tmp_name'])) : null);
+            $this->albumFactory->updateAlbum($id, $_POST['nomAlbum'], $_POST['descriptionAlbum'], $_POST['anneeAlbum'], isset($_POST['genres']) ? $_POST['genres'] : null, $_FILES['image']['size'] > 0 ? base64_encode(file_get_contents($_FILES['image']['tmp_name'])) : null);
             $this->detail($id, true);
         }
     }
@@ -187,7 +187,10 @@ class AlbumController {
             }
         }
         elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->albumFactory->createAlbum($_POST['nomAlbum'], $_POST['descriptionAlbum'], $_POST['anneeAlbum'], isset($_POST['genres']) ? $_POST['genres'] : null, isset($_POST['musicName']) && count($_POST['musicName']) > 0 && $_POST['musicName'][0] != '' ? $_POST['musicName'] : null, isset($_POST['musicDescription']) ? $_POST['musicDescription'] : null, isset($_FILES['musicImage']) ? $_FILES['musicImage']['tmp_name'] : null, $_FILES['imageAlbum']['size'] > 0 && $_FILES['imageAlbum']['size'] <= 1900000 ? base64_encode(file_get_contents($_FILES['imageAlbum']['tmp_name'])) : null);
+            echo '<pre>';
+            var_dump($_FILES);
+            echo '</pre>';
+            $this->albumFactory->createAlbum($_POST['nomAlbum'], $_POST['descriptionAlbum'], $_POST['anneeAlbum'], isset($_POST['genres']) ? $_POST['genres'] : null, isset($_POST['musicName']) && count($_POST['musicName']) > 0 && $_POST['musicName'][0] != '' ? $_POST['musicName'] : null, isset($_POST['musicDescription']) ? $_POST['musicDescription'] : null, isset($_FILES['musicImage']) ? $_FILES['musicImage']['tmp_name'] : null, $_FILES['imageAlbum']['size'] > 0 ? base64_encode(file_get_contents($_FILES['imageAlbum']['tmp_name'])) : null, isset($_FILES['musicFile']) ? $_FILES['musicFile']['tmp_name'] : null);
             header('Location: /albums');
         }
     }

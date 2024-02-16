@@ -37,7 +37,7 @@ class AlbumFactory {
         return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Album::class, [intval('idAlbum'), 'nomAlbum', 'descriptionAlbum', intval('anneeAlbum'), intval('idArtiste'), intval('idImage')]);
     }
 
-    public function createAlbum(string $nom, string $description, int $annee, array|null $genres, array|null $noms_musiques, array|null $descriptions_musiques, array|null $images_musiques, string|null $image) {
+    public function createAlbum(string $nom, string $description, int $annee, array|null $genres, array|null $noms_musiques, array|null $descriptions_musiques, array|null $images_musiques, string|null $image, array|null $musiques) {
         $stmt = $this->pdo->query('SELECT COUNT(*) FROM IMAGE_BD');
         $id_image_album = $stmt->fetch(PDO::FETCH_COLUMN) + 1;
         $stmt = $this->pdo->prepare('INSERT INTO IMAGE_BD (idImage, nomImage, dataImage) VALUES (:idImage, :nomImage, :dataImage)');
