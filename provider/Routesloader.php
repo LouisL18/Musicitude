@@ -45,6 +45,7 @@ $router->put('/playlist/{id}/add/{id}', [$playlistController, 'add']);
 $router->delete('/album/{id}', [$albumController, 'delete']);
 $router->delete('/artist/{id}', [$artistController, 'delete']);
 $router->delete('/user/{id}', [$userController, 'delete']);
+$router->delete('/playlist/{id}/remove/{id}', [$playlistController, 'remove']);
 
 $router->post('/login', [$userController, 'login']);
 $router->post('/album/create', [$albumController, 'create']);

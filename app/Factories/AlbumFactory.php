@@ -187,5 +187,11 @@ class AlbumFactory {
         }
         return $images;
     }
+
+    public function getAlbumByPlaylist($id) {
+        $stmt = $this->pdo->prepare('SELECT * FROM ALBUM WHERE idAlbum = (SELECT idAlbum FROM EST_CONSTITUE WHERE idMusique = (SELECT idMusique FROM EST_DANS WHERE idPlaylist = :id))');
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Album::class, [intval('idAlbum'), 'nomAlbum', 'descriptionAlbum', intval('anneeAlbum'), intval('idArtiste'), intval('idImage')]);
+    }
 }
 ?>

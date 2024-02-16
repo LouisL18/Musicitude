@@ -51,5 +51,10 @@ class PlaylistFactory {
         $stmt->execute(['id' => $id]);
         return $stmt->fetch(PDO::FETCH_COLUMN);
     }
+
+    public function removeMusiqueFromPlaylist(int $idPlaylist, int $idMusique) {
+        $stmt = $this->pdo->prepare('DELETE FROM EST_DANS WHERE idPlaylist = :idPlaylist AND idMusique = :idMusique');
+        $stmt->execute(['idPlaylist' => $idPlaylist, 'idMusique' => $idMusique]);
+    }
 }
 ?> 
