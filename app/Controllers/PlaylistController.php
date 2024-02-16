@@ -128,7 +128,7 @@ class PlaylistController {
     }
 
     public function delete(int $id) {
-        //$this->playlistFactory->delete($id);
+        $this->playlistFactory->delete($id);
         http_response_code(200);
     }
 }

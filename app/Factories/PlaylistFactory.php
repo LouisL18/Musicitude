@@ -82,5 +82,18 @@ class PlaylistFactory {
             'description' => $description
         ]);
     }
+
+    public function delete(int $id) {
+        //delete EST_DANS
+        $stmt = $this->pdo->prepare('DELETE FROM EST_DANS WHERE idPlaylist = :id');
+        $stmt->execute(['id' => $id]);
+        //delete A_PLAYLIST
+        $stmt = $this->pdo->prepare('DELETE FROM A_PLAYLIST WHERE idPlaylist = :id');
+        $stmt->execute(['id' => $id]);
+        //delete PLAYLIST
+        $stmt = $this->pdo->prepare('DELETE FROM PLAYLIST WHERE idPlaylist = :id');
+        $stmt->execute(['id' => $id]);
+        http_response_code(200);
+    }
 }
 ?> 
