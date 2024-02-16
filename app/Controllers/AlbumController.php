@@ -161,12 +161,14 @@ class AlbumController {
         }
     }
 
-    public function update(int $id) {
-        return null;
-    }
-
     public function delete(int $id) {
-        return null;
+        if (isset($_SESSION['artist_id']) && $_SESSION['artist_id'] == $this->albumFactory->getAlbumById($id)[0]->getIdArtiste()) {
+            $this->albumFactory->deleteAlbum($id);
+            http_response_code(200);
+        }
+        else {
+            die('Vous n\'êtes pas un artiste');
+        }
     }
 
     public function create() {

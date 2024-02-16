@@ -124,9 +124,7 @@ class AlbumFactory {
     }
 
     public function deleteAlbum($id) {
-        $stmt = $this->pdo->prepare('DELETE FROM ALBUM WHERE idAlbum = :id');
-        $stmt->execute(['id' => $id]);
-        return true;
+        //delete album
     }
 
     public function getImageById($id) {
