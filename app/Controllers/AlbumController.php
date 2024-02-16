@@ -96,11 +96,11 @@ class AlbumController {
         }
     }
 
-    public function detail(int $id, bool $force = false) {
+    public function detail(int $id) { //, bool $force = false) {
         if (!isset($_SESSION['user_id'])) {
             header('Location: /login');
         }
-        if ($_SERVER['REQUEST_METHOD'] === 'GET' || $force) {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') { //|| $force) {
             $album = $this->albumFactory->getAlbumById($id)[0];
             $super_album = [];
             $super_album[] = [
@@ -125,10 +125,6 @@ class AlbumController {
             $css = '../../css/album';
             require_once __DIR__ .' /../../public/index.php';
         }
-        elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->albumFactory->updateAlbum($id, $_POST['nomAlbum'], $_POST['descriptionAlbum'], $_POST['anneeAlbum'], isset($_POST['genres']) ? $_POST['genres'] : null, $_FILES['image']['size'] > 0 ? base64_encode(file_get_contents($_FILES['image']['tmp_name'])) : null);
-            $this->detail($id, true);
-        }
     }
 
     public function search() {
@@ -140,24 +136,37 @@ class AlbumController {
     }
 
     public function edit(int $id) {
-        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-            $album = $this->albumFactory->getAlbumById($id)[0];
-            $super_album = [];
-            $super_album[] = [
-                'Album' => $album,
-                'Artiste' => $this->artistFactory->getArtistById($album->getIdArtiste()),
-                'Image' => $this->albumFactory->getImageById($album->getIdImage()),
-                'Genres' => $this->albumFactory->getGenresByAlbum($album->getIdAlbum()),
-                'Musiques' => $this->albumFactory->getMusiquesByAlbum($album->getIdAlbum()),
-                'Note' => $this->albumFactory->getNoteMoyenneByAlbum($album->getIdAlbum()),
-            ]; 
-            global $main;
-            global $css;
-            $all_genres = $this->albumFactory->getAllGenres();
-            $_SESSION['edit_id'] = $id;
-            $main = require_once __DIR__ . '/../Views/album/edit.php';
-            $css = '../../../css/album';
-            require_once __DIR__ . '/../../public/index.php';
+        if (!isset($_SESSION['artist_id']) || $this->albumFactory->getAlbumById($id)[0]->getIdArtiste() != $_SESSION['artist_id']) {
+            die('Vous n\'avez pas les droits pour modifier cet album');
+        }
+        else {
+            if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                $album = $this->albumFactory->getAlbumById($id)[0];
+                $super_album = [];
+                $super_album[] = [
+                    'Album' => $album,
+                    'Artiste' => $this->artistFactory->getArtistById($album->getIdArtiste()),
+                    'Image' => $this->albumFactory->getImageById($album->getIdImage()),
+                    'Genres' => $this->albumFactory->getGenresByAlbum($album->getIdAlbum()),
+                    'Musiques' => $this->albumFactory->getMusiquesByAlbum($album->getIdAlbum()),
+                    'Note' => $this->albumFactory->getNoteMoyenneByAlbum($album->getIdAlbum()),
+                ]; 
+                global $main;
+                global $css;
+                $all_genres = $this->albumFactory->getAllGenres();
+                $_SESSION['edit_id'] = $id;
+                $main = require_once __DIR__ . '/../Views/album/edit.php';
+                $css = '../../../css/album';
+                require_once __DIR__ . '/../../public/index.php';
+            }
+            elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $this->albumFactory->updateAlbum($id, $_POST['nomAlbum'], $_POST['descriptionAlbum'], $_POST['anneeAlbum'], 
+                isset($_POST['genres']) ? $_POST['genres'] : null, $_FILES['imageAlbum']['size'] > 0 ? base64_encode(file_get_contents($_FILES['imageAlbum']['tmp_name'])) : null, 
+                isset($_POST['musicName']) && count($_POST['musicName']) > 0 && $_POST['musicName'][0] != '' ? $_POST['musicName'] : null, 
+                isset($_POST['musicDescription']) ? $_POST['musicDescription'] : null, isset($_FILES['musicImage']) ? $_FILES['musicImage']['tmp_name'] : null,
+                isset($_FILES['musicFile']) ? $_FILES['musicFile']['tmp_name'] : null, isset($_POST['musicId']) ? $_POST['musicId'] : null);
+                header('Location: /album/' . $id);
+            }
         }
     }
 
@@ -187,9 +196,6 @@ class AlbumController {
             }
         }
         elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            echo '<pre>';
-            var_dump($_FILES);
-            echo '</pre>';
             $this->albumFactory->createAlbum($_POST['nomAlbum'], $_POST['descriptionAlbum'], $_POST['anneeAlbum'], isset($_POST['genres']) ? $_POST['genres'] : null, isset($_POST['musicName']) && count($_POST['musicName']) > 0 && $_POST['musicName'][0] != '' ? $_POST['musicName'] : null, isset($_POST['musicDescription']) ? $_POST['musicDescription'] : null, isset($_FILES['musicImage']) ? $_FILES['musicImage']['tmp_name'] : null, $_FILES['imageAlbum']['size'] > 0 ? base64_encode(file_get_contents($_FILES['imageAlbum']['tmp_name'])) : null, isset($_FILES['musicFile']) ? $_FILES['musicFile']['tmp_name'] : null);
             header('Location: /albums');
         }
@@ -201,6 +207,13 @@ class AlbumController {
         }
         elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $this->albumFactory->rateAlbum($id, $note);
+            http_response_code(200);
+        }
+    }
+
+    public function deleteMusic(int $id) {
+        if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+            $this->albumFactory->deleteMusic($id);
             http_response_code(200);
         }
     }

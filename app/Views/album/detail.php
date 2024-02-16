@@ -41,9 +41,15 @@ $content .= '</div></div>
                             <div class="col-md-2 no-padding">
                                 <img src="data:image/jpeg;base64,' . utf8_decode($musique['Image'][0]->getDataImage()) . '" alt="' . $musique['Musique']->getNomMusique() . '" class="img-fluid img-thumbnail small-image">
                             </div>
-                            <div class="col-md-8 no-padding">
+                            <div class="col-md-3 no-padding">
                                 <h5>' . $musique['Musique']->getNomMusique() . '</h5>
                                 <p>' . $musique['Musique']->getDescriptionMusique() . '</p>
+                            </div>
+                            <div class="col-md-6 p-0 d-flex align-items-center">
+                                <audio controls class="w-100">
+                                    <source src="data:audio/mpeg;base64,' . utf8_decode($musique['Musique']->getDataMusique()) . '" type="audio/mpeg">
+                                    Your browser does not support the audio element.
+                                </audio>
                             </div>
                             <div class="col text-right d-flex justify-content-end">
                                 <div class="dropdown">
@@ -119,6 +125,15 @@ $content .= <<<HTML
             s.classList.remove('highlighted');
         });
     }
+    document.addEventListener('play', function(e){
+        let audios = document.getElementsByTagName('audio');
+        for(let i = 0, len = audios.length; i < len;i++){
+            if(audios[i] != e.target){
+                audios[i].pause();
+                audios[i].currentTime = 0;
+            }
+        }
+    }, true);
 </script>
 HTML;
 return $content;

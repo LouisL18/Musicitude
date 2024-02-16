@@ -37,8 +37,8 @@ class AlbumFactory {
         return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Album::class, [intval('idAlbum'), 'nomAlbum', 'descriptionAlbum', intval('anneeAlbum'), intval('idArtiste'), intval('idImage')]);
     }
 
-    public function createAlbum(string $nom, string $description, int $annee, array|null $genres, array|null $noms_musiques, array|null $descriptions_musiques, array|null $images_musiques, string|null $image, array|null $musiques) {
-        $stmt = $this->pdo->query('SELECT COUNT(*) FROM IMAGE_BD');
+    public function createAlbum(string $nom, string $description, int $annee, array|null $genres, array|null $noms_musiques, array|null $descriptions_musiques, array|null $images_musiques, string|null $image, array|null $data_musiques) {
+        $stmt = $this->pdo->query('SELECT MAX(idImage) FROM IMAGE_BD');
         $id_image_album = $stmt->fetch(PDO::FETCH_COLUMN) + 1;
         $stmt = $this->pdo->prepare('INSERT INTO IMAGE_BD (idImage, nomImage, dataImage) VALUES (:idImage, :nomImage, :dataImage)');
         $stmt->execute([
@@ -46,7 +46,7 @@ class AlbumFactory {
             'nomImage' => $id_image_album . '_image',
             'dataImage' => $image
         ]);
-        $stmt = $this->pdo->query('SELECT COUNT(*) FROM ALBUM');
+        $stmt = $this->pdo->query('SELECT MAX(idAlbum) FROM ALBUM');
         $id_album = $stmt->fetch(PDO::FETCH_COLUMN) + 1;
         $stmt = $this->pdo->prepare('INSERT INTO ALBUM (idAlbum, nomAlbum, descriptionAlbum, anneeAlbum, idArtiste, idImage) VALUES (:idAlbum, :nomAlbum, :descriptionAlbum, :anneeAlbum, :idArtiste, :idImage)');
         $stmt->execute([
@@ -67,7 +67,7 @@ class AlbumFactory {
         //insert musiques
         if ($noms_musiques != null) {
             for ($i = 0; $i < count($noms_musiques); $i++) {
-                    $stmt = $this->pdo->query('SELECT COUNT(*) FROM IMAGE_BD');
+                    $stmt = $this->pdo->query('SELECT MAX(idImage) FROM IMAGE_BD');
                     $id_image_musique = $stmt->fetch(PDO::FETCH_COLUMN) + 1;
                     $stmt = $this->pdo->prepare('INSERT INTO IMAGE_BD (idImage, nomImage, dataImage) VALUES (:idImage, :nomImage, :dataImage)');
                     
@@ -77,13 +77,15 @@ class AlbumFactory {
                         'nomImage' => $id_image_musique . '_image',
                         'dataImage' => $data_image
                     ]);
-                $stmt = $this->pdo->query('SELECT COUNT(*) FROM MUSIQUE');
+                $stmt = $this->pdo->query('SELECT MAX(idMusique) FROM MUSIQUE');
                 $id_musique = $stmt->fetch(PDO::FETCH_COLUMN) + 1;
-                $stmt = $this->pdo->prepare('INSERT INTO MUSIQUE (idMusique, nomMusique, descriptionMusique, idImage) VALUES (:idMusique, :nomMusique, :descriptionMusique, :idImage)');
+                $stmt = $this->pdo->prepare('INSERT INTO MUSIQUE (idMusique, nomMusique, descriptionMusique, dataMusique, idImage) VALUES (:idMusique, :nomMusique, :descriptionMusique, :dataMusique, :idImage)');
+                $data_musique = $data_musiques[$i] != "" ? base64_encode(file_get_contents($data_musiques[$i])) : null;
                 $stmt->execute([
                     'idMusique' => $id_musique,
                     'nomMusique' => $noms_musiques[$i],
                     'descriptionMusique' => $descriptions_musiques[$i],
+                    'dataMusique' => $data_musique,
                     'idImage' => $id_image_musique
                 ]);
                 $stmt = $this->pdo->prepare('INSERT INTO EST_CONSTITUE (idAlbum, idMusique) VALUES (:idAlbum, :idMusique)');
@@ -95,7 +97,7 @@ class AlbumFactory {
         }
     }
 
-    public function updateAlbum(int $id, string $nom, string $description, int $annee, array|null $genres, string|null $image) {
+    public function updateAlbum(int $id, string $nom, string $description, int $annee, array|null $genres, string|null $image, array|null $musiques_names, array|null $musiques_descriptions, array|null $musiques_images, array|null $musiques_data, array|null $musiques_ids) {
         $stmt = $this->pdo->prepare('UPDATE ALBUM SET nomAlbum = :nom, descriptionAlbum = :description, anneeAlbum = :annee WHERE idAlbum = :id');
         $stmt->execute([
             'id'=> $id,
@@ -120,6 +122,32 @@ class AlbumFactory {
                 'id'=> $id,
                 'data' => $image
             ]);
+        }
+        if ($musiques_names != null) {
+            for ($i = 0; $i < count($musiques_names); $i++) {
+                $idMusique = $musiques_ids[$i]; // Assuming you have an array of idMusique values
+
+                if ($musiques_images[$i] != null && $musiques_images[$i] != "") {
+                    $stmt = $this->pdo->prepare('UPDATE IMAGE_BD SET dataImage = :data WHERE idImage = (SELECT idImage FROM MUSIQUE WHERE idMusique = :idMusique)');
+                    $stmt->execute([
+                        'idMusique' => $idMusique,
+                        'data' => base64_encode(file_get_contents($musiques_images[$i]))
+                    ]);
+                }
+                if ($musiques_data[$i] != null && $musiques_data[$i] != "") {
+                    $stmt = $this->pdo->prepare('UPDATE MUSIQUE SET dataMusique = :data WHERE idMusique = :idMusique');
+                    $stmt->execute([
+                        'idMusique' => $idMusique,
+                        'data' => base64_encode(file_get_contents($musiques_data[$i]))
+                    ]);
+                }
+                $stmt = $this->pdo->prepare('UPDATE MUSIQUE SET nomMusique = :nom, descriptionMusique = :description WHERE idMusique = :idMusique');
+                $stmt->execute([
+                    'idMusique' => $idMusique,
+                    'nom' => $musiques_names[$i],
+                    'description' => $musiques_descriptions[$i]
+                ]);
+            }
         }
     }
 
@@ -214,7 +242,7 @@ class AlbumFactory {
     public function getMusiquesByAlbum($id) {
         $stmt = $this->pdo->prepare('SELECT * FROM MUSIQUE NATURAL JOIN EST_CONSTITUE where idAlbum = :id');
         $stmt->execute(['id' => $id]);
-        $musiques = $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Musique::class, [intval('idMusique'), 'nomMusique', 'descriptionMusique', 'idImage']);
+        $musiques = $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Musique::class, [intval('idMusique'), 'nomMusique', 'descriptionMusique', 'dataMusique', 'idImage']);
         $musiques_images = [];
         foreach ($musiques as $musique) {
             $musiques_images[] = [
@@ -271,6 +299,17 @@ class AlbumFactory {
             'idAlbum' => $id,
             'note' => $note
         ]);
+    }
+
+    public function deleteMusic($id) {
+        $stmt = $this->pdo->prepare('DELETE FROM IMAGE_BD WHERE idImage = (SELECT idImage FROM MUSIQUE WHERE idMusique = :id)');
+        $stmt->execute(['id' => $id]);
+        $stmt = $this->pdo->prepare('DELETE FROM EST_DANS WHERE idMusique = :id');
+        $stmt->execute(['id' => $id]);
+        $stmt = $this->pdo->prepare('DELETE FROM EST_CONSTITUE WHERE idMusique = :id');
+        $stmt->execute(['id' => $id]);
+        $stmt = $this->pdo->prepare('DELETE FROM MUSIQUE WHERE idMusique = :id');
+        $stmt->execute(['id' => $id]);
     }
 }
 ?>
