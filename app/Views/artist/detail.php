@@ -24,8 +24,8 @@ $content .= '</div>
         $content .= '<i class="" style="font-size: 2em;"> ('.strval($super_artist['NbNotes']).')</i>';
 $content .= '</div></div>';
 $content .= '</div></div>';
+$content .= "<h3 class='display-5 text-white'>Albums</h3>";
 $content .= '</div></div>';
-$content .= "<h3 class='display-5 text-white' id='album'>Albums :</h3>";
 $content .= "<div class='row justify-content-center'>";
 $i = 0;
 foreach ($super_artist['Albums'] as $album) {

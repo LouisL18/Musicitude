@@ -23,6 +23,7 @@ $content .= '</div>
         for(; $i < 5; $i++) {
             $content .= '<i class="bi bi-star" style="font-size: 2em;"></i>';
         }
+        $content .= '<i class="" style="font-size: 2em;"> ('.strval($super_album[0]['NbNote'][0]).')</i>';
         $content .= '<div class="d-flex flex-wrap mt-3">';
         foreach($super_album[0]['Genres'] as $genre) {
             $content .= '<div class="alert alert-secondary m-1" role="alert">' . $genre->getNomGenre() . '</div>';

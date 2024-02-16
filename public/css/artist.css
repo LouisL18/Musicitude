@@ -62,14 +62,7 @@
     overflow-x: hidden;
 }
 .small-image {
-    width: 100px; 
+    width: 100px;
     height: 100px; 
     object-fit: cover;
 }
-
-#album {
-    margin-left: 19rem;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-}
-
