@@ -69,6 +69,46 @@ class PlaylistController {
         }
     }
 
+    public function create() {
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: /login');
+        }
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            global $main;
+            global $css;
+            $main = require_once __DIR__ . '/../Views/playlist/create.php';
+            $css = '../../css/playlist';
+            require_once __DIR__ . '/../../public/index.php';
+        }
+        elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->playlistFactory->create($_POST['nomPlaylist'], $_POST['descriptionPlaylist']);
+            header('Location: /playlists');
+        }
+    }
+
+    public function edit(int $id) {
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: /login');
+        }
+        if ($_SESSION['user_id'] == $this->playlistFactory->getUserIdByPlaylist($id)) {
+            if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                $playlist = $this->playlistFactory->getPlaylistById($id)[0];
+                global $main;
+                global $css;
+                $main = require_once __DIR__ . '/../Views/playlist/edit.php';
+                $css = '../../../css/playlist';
+                require_once __DIR__ . '/../../public/index.php';
+            }
+            elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $this->playlistFactory->update($id, $_POST['nomPlaylist'], $_POST['descriptionPlaylist']);
+                header('Location: /playlist/' . $id);
+            }
+        }
+        else {
+            die('Vous n\'êtes pas l\'auteur de cette playlist');
+        }
+    }
+
     public function search() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
@@ -84,6 +124,11 @@ class PlaylistController {
 
     public function remove(int $idPlaylist, int $idMusique) {
         $this->playlistFactory->removeMusiqueFromPlaylist($idPlaylist, $idMusique);
+        http_response_code(200);
+    }
+
+    public function delete(int $id) {
+        //$this->playlistFactory->delete($id);
         http_response_code(200);
     }
 }

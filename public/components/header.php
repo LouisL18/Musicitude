@@ -1,7 +1,7 @@
 <?php
 if (isset($_SESSION['user_id'])) {
     if (isset($_SESSION['artist_id'])) {
-        $add_album = '<li><a class="dropdown-item" href="/album/create">Ajouter un album</a></li>';
+        $add_album = '<li><a class="dropdown-item" href="/album/create">Créer un album</a></li>';
     } else {
         $add_album = '';
     }
@@ -16,6 +16,11 @@ if (isset($_SESSION['user_id'])) {
         <li><a class="dropdown-item" href="/artists">Tous les artistes</a></li>
     </ul>
     HTML;
+    $playlists_dropdown = <<<HTML
+    <ul class="dropdown-menu bg-secondary" aria-labelledby="dropdownMenuLink">
+        <li><a class="dropdown-item" href="/playlist/create">Créer une playlist</a></li>
+    </ul>
+    HTML;
     $profile_dropdown = <<<HTML
     <ul class="dropdown-menu bg-secondary" aria-labelledby="dropdownMenuLink">
         <li><a class="dropdown-item" href="/user">Mon profil</a></li>
@@ -25,6 +30,7 @@ if (isset($_SESSION['user_id'])) {
 } else {
     $albums_dropdown = '';
     $artists_dropdown = '';
+    $playlists_dropdown = '';
     $profile_dropdown = '';
     $add_album = '';
 }
@@ -33,7 +39,7 @@ return <<<HTML
     <div class="container-fluid justify-content-between">
         <div class="dropdown">
             <a class="navbar-brand" href="/albums" role="button" id="dropdownMenuLink" aria-expanded="false">
-                <img src="/images/album.png" alt="Album Logo" class="logo">
+                <img src="/images/album.png" alt="Albums Logo" class="logo">
                 <span class="text-dark h3">Albums</span>
             </a>
             $albums_dropdown
@@ -49,10 +55,13 @@ return <<<HTML
             <img src="/images/logo.png" alt="Musicitude Logo" class="logo">
             <span class="text-dark h3">Musicitude</span>
         </a>
-        <a class="navbar-brand" href="/playlists">
-            <img src="/images/playlist.png" alt="Playlist Logo" class="logo">
-            <span class="text-dark h3">Playlists</span>
-        </a>
+        <div class="dropdown">
+            <a class="navbar-brand" href="/playlists" role="button" id="dropdownMenuLink" aria-expanded="false">
+                <img src="/images/playlist.png" alt="Playlists Logo" class="logo">
+                <span class="text-dark h3">Playlists</span>
+            </a>
+            $playlists_dropdown
+        </div>
         <div class="dropdown">
             <a class="navbar-brand" href="/user">
                 <img src="/images/profile.png" alt="Profile Logo" class="logo">

@@ -30,6 +30,7 @@ $content .= '</div></div>
         <h3 class="display-4">' . $super_playlist['Playlist']->getNomPlaylist() . '</h3>
         <p class="lead">' . $super_playlist['Playlist']->getDescriptionPlaylist() . '</p>';
 $content .= '</div>';
+$content .= '<a href="/playlist/' . $super_playlist['Playlist']->getIdPlaylist() . '/edit" class="btn btn-primary rounded-pill">Modifier</a>';
 $content .= '</div></div>
     <div class="row mt-4">
         <h3 class="display-5 text-white">Titres</h3>
