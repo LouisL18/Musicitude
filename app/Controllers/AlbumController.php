@@ -156,7 +156,7 @@ class AlbumController {
             $all_genres = $this->albumFactory->getAllGenres();
             $_SESSION['edit_id'] = $id;
             $main = require_once __DIR__ . '/../Views/album/edit.php';
-            $css = '../../css/album';
+            $css = '../../../css/album';
             require_once __DIR__ . '/../../public/index.php';
         }
     }
@@ -189,6 +189,16 @@ class AlbumController {
         elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $this->albumFactory->createAlbum($_POST['nomAlbum'], $_POST['descriptionAlbum'], $_POST['anneeAlbum'], isset($_POST['genres']) ? $_POST['genres'] : null, isset($_POST['musicName']) && count($_POST['musicName']) > 0 && $_POST['musicName'][0] != '' ? $_POST['musicName'] : null, isset($_POST['musicDescription']) ? $_POST['musicDescription'] : null, isset($_FILES['musicImage']) ? $_FILES['musicImage']['tmp_name'] : null, $_FILES['imageAlbum']['size'] > 0 && $_FILES['imageAlbum']['size'] <= 1900000 ? base64_encode(file_get_contents($_FILES['imageAlbum']['tmp_name'])) : null);
             header('Location: /albums');
+        }
+    }
+
+    public function rate(int $id, int $note) {
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: /login');
+        }
+        elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->albumFactory->rateAlbum($id, $note);
+            http_response_code(200);
         }
     }
 }

@@ -14,14 +14,14 @@ $content .= '</div>
         <p class="lead">' . $super_album[0]['Artiste'][0]->getNomArtiste() . '</p>
         <p class="lead">' . $super_album[0]['Album']->getAnneeAlbum() . '</p>';
         for($i = 0; $i < floor($super_album[0]['Note'][0] ?? 0); $i++) {
-            $content .= '<i class="bi bi-star-fill" style="font-size: 2em;"></i>';
+            $content .= '<i class="bi bi-star-fill star" style="font-size: 2em;" data-rating="'.($i+1).'" onclick="rate(this)" onmouseover="highlight(this)" onmouseout="unhighlight(this)"></i>';
         }
         if($super_album[0]['Note'][0] - floor($super_album[0]['Note'][0] ?? 0) > 0) {
-            $content .= '<i class="bi bi-star-half" style="font-size: 2em;"></i>';
+            $content .= '<i class="bi bi-star-half star" style="font-size: 2em;" data-rating="'.($i+1).'" onclick="rate(this)" onmouseover="highlight(this)" onmouseout="unhighlight(this)"></i>';
             $i++;   
         }
         for(; $i < 5; $i++) {
-            $content .= '<i class="bi bi-star" style="font-size: 2em;"></i>';
+            $content .= '<i class="bi bi-star star" style="font-size: 2em;" data-rating="'.($i+1).'" onclick="rate(this)" onmouseover="highlight(this)" onmouseout="unhighlight(this)"></i>';
         }
         $content .= '<div class="d-flex flex-wrap mt-3">';
         foreach($super_album[0]['Genres'] as $genre) {
@@ -87,6 +87,36 @@ $content .= <<<HTML
                 button.innerText = "Ajouté avec succès";
                 button.disabled = true;
             }
+        });
+    }
+    function rate(star) {
+        fetch('/album/' + {$super_album[0]['Album']->getIdAlbum()} + '/note/' + star.getAttribute('data-rating'), {
+            method: 'POST',
+        })
+        .then(response => {
+            if(response.status === 200) {
+                location.reload();
+            }
+        });
+    }
+    function highlight(star) {
+        let stars = Array.from(document.querySelectorAll('.star')).reverse();
+        let highlight = false;
+        stars.forEach(function(s) {
+            if (s === star) {
+                highlight = true;
+            }
+            if (highlight) {
+                s.classList.add('highlighted');
+            } else {
+                s.classList.remove('highlighted');
+            }
+        });
+    }
+    function unhighlight(star) {
+        let stars = document.querySelectorAll('.star');
+        stars.forEach(function(s) {
+            s.classList.remove('highlighted');
         });
     }
 </script>

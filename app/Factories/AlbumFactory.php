@@ -263,5 +263,14 @@ class AlbumFactory {
         $stmt->execute(['id' => $id]);
         return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Album::class, [intval('idAlbum'), 'nomAlbum', 'descriptionAlbum', intval('anneeAlbum'), intval('idArtiste'), intval('idImage')]);
     }
+
+    public function rateAlbum($id, $note) {
+        $stmt = $this->pdo->prepare('INSERT OR REPLACE INTO NOTE (idUtilisateur, idAlbum, note) VALUES (:idUser, :idAlbum, :note)');
+        $stmt->execute([
+            'idUser' => $_SESSION['user_id'],
+            'idAlbum' => $id,
+            'note' => $note
+        ]);
+    }
 }
 ?>

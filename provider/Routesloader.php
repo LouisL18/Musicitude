@@ -61,5 +61,6 @@ $router->post('/albums', [$albumController, 'index']);
 $router->post('/album/{id}', [$albumController, 'detail']);
 $router->post('/playlist/create', [$playlistController, 'create']);
 $router->post('/playlist/{id}/edit', [$playlistController, 'edit']);
+$router->post('/album/{id}/note/{id}', [$albumController, 'rate']);
 
 $router->run();
