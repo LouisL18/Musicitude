@@ -248,6 +248,12 @@ class AlbumFactory {
         return $stmt->fetchAll();
     }
 
+    public function getNbNoteByAlbum($id) {
+        $stmt = $this->pdo->prepare('SELECT COUNT(*) FROM NOTE WHERE idAlbum = :id');
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch();
+    }
+  
     public function getImagesByMusiques($musiques) {
         $images = [];
         foreach ($musiques as $musique) {

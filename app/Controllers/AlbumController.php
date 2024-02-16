@@ -110,6 +110,7 @@ class AlbumController {
                 'Genres' => $this->albumFactory->getGenresByAlbum($album->getIdAlbum()),
                 'Musiques' => $this->albumFactory->getMusiquesByAlbum($album->getIdAlbum()),
                 'Note' => $this->albumFactory->getNoteMoyenneByAlbum($album->getIdAlbum()),
+                'NbNote' => $this->albumFactory->getNbNoteByAlbum($id),
             ]; 
             global $main;
             global $css;
