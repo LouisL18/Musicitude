@@ -11,7 +11,7 @@ $content .= '</div>
         <div class="card-body">
         <h3 class="display-4">' . $super_album[0]['Album']->getNomAlbum() . '</h3>
         <p class="lead">' . $super_album[0]['Album']->getDescriptionAlbum() . '</p>
-        <p class="lead">' . $super_album[0]['Artiste'][0]->getNomArtiste() . '</p>
+        <a href="/artist/' . $super_album[0]['Artiste'][0]->getIdArtiste() . '" class="text-decoration-none text-dark"><p class="lead">' . $super_album[0]['Artiste'][0]->getNomArtiste() . '</p></a>
         <p class="lead">' . $super_album[0]['Album']->getAnneeAlbum() . '</p>';
         for($i = 0; $i < floor($super_album[0]['Note'][0] ?? 0); $i++) {
             $content .= '<i class="bi bi-star-fill star" style="font-size: 2em;" data-rating="'.($i+1).'" onclick="rate(this)" onmouseover="highlight(this)" onmouseout="unhighlight(this)"></i>';
@@ -49,7 +49,7 @@ $content .= '</div></div>
                             <div class="col-md-6 p-0 d-flex align-items-center">
                                 <audio controls class="w-100">
                                     <source src="data:audio/mpeg;base64,' . utf8_decode($musique['Musique']->getDataMusique()) . '" type="audio/mpeg">
-                                    Your browser does not support the audio element.
+                                    Format audio non supporté
                                 </audio>
                             </div>
                             <div class="col text-right d-flex justify-content-end">

@@ -48,7 +48,7 @@ $content .= '</div></div>
                             <div class="col-md-6 p-0 d-flex align-items-center">
                                 <audio controls class="w-100">
                                     <source src="data:audio/mpeg;base64,' . utf8_decode($musique['Musique']->getDataMusique()) . '" type="audio/mpeg">
-                                    Your browser does not support the audio element.
+                                    Format audio non supporté
                                 </audio>
                             </div>
                             <div class="col text-right d-flex justify-content-end align-items-baseline">
