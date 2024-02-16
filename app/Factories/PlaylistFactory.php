@@ -32,7 +32,7 @@ class PlaylistFactory {
     public function getMusiquesByPlaylist($id) {
         $stmt = $this->pdo->prepare('SELECT * FROM MUSIQUE WHERE idMusique IN (SELECT idMusique FROM EST_DANS WHERE idPlaylist = :id)');
         $stmt->execute(['id' => $id]);
-        return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Musique::class, [intval('idMusique'), 'nomMusique', 'descriptionMusique', 'idImage']);
+        return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Musique::class, [intval('idMusique'), 'nomMusique', 'descriptionMusique', 'dataMusique', 'idImage']);
     }
 
     public function getPlaylistsByUser(int $id) {

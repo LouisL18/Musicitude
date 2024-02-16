@@ -14,14 +14,14 @@ $content .= '</div>
         <p class="lead">' . $super_album[0]['Artiste'][0]->getNomArtiste() . '</p>
         <p class="lead">' . $super_album[0]['Album']->getAnneeAlbum() . '</p>';
         for($i = 0; $i < floor($super_album[0]['Note'][0] ?? 0); $i++) {
-            $content .= '<i class="bi bi-star-fill" style="font-size: 2em;"></i>';
+            $content .= '<i class="bi bi-star-fill star" style="font-size: 2em;" data-rating="'.($i+1).'" onclick="rate(this)" onmouseover="highlight(this)" onmouseout="unhighlight(this)"></i>';
         }
         if($super_album[0]['Note'][0] - floor($super_album[0]['Note'][0] ?? 0) > 0) {
-            $content .= '<i class="bi bi-star-half" style="font-size: 2em;"></i>';
+            $content .= '<i class="bi bi-star-half star" style="font-size: 2em;" data-rating="'.($i+1).'" onclick="rate(this)" onmouseover="highlight(this)" onmouseout="unhighlight(this)"></i>';
             $i++;   
         }
         for(; $i < 5; $i++) {
-            $content .= '<i class="bi bi-star" style="font-size: 2em;"></i>';
+            $content .= '<i class="bi bi-star star" style="font-size: 2em;" data-rating="'.($i+1).'" onclick="rate(this)" onmouseover="highlight(this)" onmouseout="unhighlight(this)"></i>';
         }
         $content .= '<i class="" style="font-size: 2em;"> ('.strval($super_album[0]['NbNote'][0]).')</i>';
         $content .= '<div class="d-flex flex-wrap mt-3">';
@@ -42,9 +42,15 @@ $content .= '</div></div>
                             <div class="col-md-2 no-padding">
                                 <img src="data:image/jpeg;base64,' . utf8_decode($musique['Image'][0]->getDataImage()) . '" alt="' . $musique['Musique']->getNomMusique() . '" class="img-fluid img-thumbnail small-image">
                             </div>
-                            <div class="col-md-8 no-padding">
+                            <div class="col-md-3 no-padding">
                                 <h5>' . $musique['Musique']->getNomMusique() . '</h5>
                                 <p>' . $musique['Musique']->getDescriptionMusique() . '</p>
+                            </div>
+                            <div class="col-md-6 p-0 d-flex align-items-center">
+                                <audio controls class="w-100">
+                                    <source src="data:audio/mpeg;base64,' . utf8_decode($musique['Musique']->getDataMusique()) . '" type="audio/mpeg">
+                                    Your browser does not support the audio element.
+                                </audio>
                             </div>
                             <div class="col text-right d-flex justify-content-end">
                                 <div class="dropdown">
@@ -90,6 +96,45 @@ $content .= <<<HTML
             }
         });
     }
+    function rate(star) {
+        fetch('/album/' + {$super_album[0]['Album']->getIdAlbum()} + '/note/' + star.getAttribute('data-rating'), {
+            method: 'POST',
+        })
+        .then(response => {
+            if(response.status === 200) {
+                location.reload();
+            }
+        });
+    }
+    function highlight(star) {
+        let stars = Array.from(document.querySelectorAll('.star')).reverse();
+        let highlight = false;
+        stars.forEach(function(s) {
+            if (s === star) {
+                highlight = true;
+            }
+            if (highlight) {
+                s.classList.add('highlighted');
+            } else {
+                s.classList.remove('highlighted');
+            }
+        });
+    }
+    function unhighlight(star) {
+        let stars = document.querySelectorAll('.star');
+        stars.forEach(function(s) {
+            s.classList.remove('highlighted');
+        });
+    }
+    document.addEventListener('play', function(e){
+        let audios = document.getElementsByTagName('audio');
+        for(let i = 0, len = audios.length; i < len;i++){
+            if(audios[i] != e.target){
+                audios[i].pause();
+                audios[i].currentTime = 0;
+            }
+        }
+    }, true);
 </script>
 HTML;
 return $content;

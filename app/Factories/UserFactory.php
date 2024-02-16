@@ -40,7 +40,7 @@ class UserFactory {
             header('Location: /register');
             return null;
         }
-        $stmt = $this->pdo->query('SELECT COUNT(*) FROM IMAGE_BD');
+        $stmt = $this->pdo->query('SELECT MAX(idImage) FROM IMAGE_BD');
         $idImage = $stmt->fetchColumn() + 1;
         $stmt = $this->pdo->prepare('INSERT INTO IMAGE_BD (idImage, nomImage, dataImage) VALUES (:idImage, :nomImage, :dataImage)');
         $stmt->execute([

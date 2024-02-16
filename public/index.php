@@ -17,11 +17,9 @@ if (!isset($_SESSION['user_id']) && $_SERVER['REQUEST_URI'] != '/register' && $_
 if ($_SERVER['REQUEST_URI'] != '/login' && $_SERVER['REQUEST_URI'] != '/register') {
     $header = require_once __DIR__ . '/components/header.php';
 }
-
-
 ?>
 
-<DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
     <head>
         <meta charset="UTF-8">

@@ -49,15 +49,19 @@ $content .= '<div class="card rounded-card text-dark mr-3 flex-grow-1 mb-3 mt-3"
 $content .= '<div class="card-body row">';
 $content .= '<div class="col-md-3 no-padding">';
 $content .= '<label for="musicImage[]" class="form-label">Image</label>';
-$content .= '<input type="file" class="form-control" id="musicImage[]" name="musicImage[]" accept="image/*">';
+$content .= '<input type="file" class="form-control image" id="musicImage[]" name="musicImage[]" accept="image/*">';
 $content .= '</div>';
-$content .= '<div class="col-md-4 no-padding">';
+$content .= '<div class="col-md-2 no-padding">';
 $content .= '<label for="musicName[]" class="form-label">Titre</label>';
 $content .= '<input type="text" class="form-control" id="musicName[]" name="musicName[]">';
 $content .= '</div>';
-$content .= '<div class="col-md-4 no-padding">';
+$content .= '<div class="col-md-3 no-padding">';
 $content .= '<label for="musicDescription[]" class="form-label">Description</label>';
 $content .= '<textarea rows="1" class="form-control" id="musicDescription[]" name="musicDescription[]"></textarea>';
+$content .= '</div>';
+$content .=  '<div class="col-md-3 no-padding">';
+$content .= '<label for="musicFile[]" class="form-label">Fichier audio</label>';
+$content .= '<input type="file" class="form-control musique" id="musicFile[]" name="musicFile[]" accept="audio/*">';
 $content .= '</div>';
 $content .= '<div class="col-md-1 d-flex no-padding justify-content-center align-items-center">';
 $content .= '<button type="button" class="btn btn-danger" onclick="deleteMusic(this)">Supprimer</button>';
@@ -85,7 +89,8 @@ window.onload = function() {
         var newMusic = musicList.children[0].cloneNode(true);
         newMusic.querySelector("input[type=text]").value = "";
         newMusic.querySelector("textarea").value = "";
-        newMusic.querySelector("input[type=file]").value = "";
+        newMusic.querySelector(".image").value = "";
+        newMusic.querySelector(".musique").value = "";
         musicList.appendChild(newMusic);
     }
     document.getElementById("addMusic").addEventListener("click", addMusic);
