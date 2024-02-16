@@ -9,7 +9,8 @@ if (isset($css)) {
 else {
     $css = '';
 }
-if (!isset($_SESSION['user_id']) and $_SERVER['REQUEST_URI'] != '/register' and $_SERVER['REQUEST_URI'] != '/login') {
+
+if (!isset($_SESSION['user_id']) && $_SERVER['REQUEST_URI'] != '/register' && $_SERVER['REQUEST_URI'] != '/login') {
     header('Location: /login');
 }
 

@@ -61,11 +61,6 @@
     max-height: 800px;
     overflow-x: hidden;
 }
-.small-image {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-}
 
 .detail {
     left : -50%;
@@ -73,4 +68,42 @@
     background-color: white;
     border-radius: 15px 0px 15px 15px; 
     text-align: center;
+}
+
+.first-row > div:first-child > img {
+    border-radius: 15px 0 0 0;
+}
+
+.first-row > div:last-child > img {
+    border-radius: 0 15px 0 0;
+}
+
+.first-row > div:first-child {
+    padding-right: 0;
+}
+
+.first-row > div:last-child {
+    padding-left: 0;
+}
+
+.second-row > div:first-child {
+    padding-right: 0;
+}
+
+.second-row > div:last-child {
+    padding-left: 0;
+}
+
+.second-row > div:first-child > img {
+    border-radius: 0 0 0 15px;
+}
+
+.second-row > div:last-child > img {
+    border-radius: 0 0 15px 0;
+}
+
+.scrollable .small-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
 }

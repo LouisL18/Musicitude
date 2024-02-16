@@ -1,21 +1,10 @@
-body {
-    overflow-x: hidden;
-    margin: 0;
-    padding: 0;
-}
-
-.navbar {
-    padding: 3rem;
-    margin: 1rem;
+.rounded-card {
+    position: relative;
     border-radius: 15px;
-    margin-bottom: 5rem;
+    width: 15rem;
 }
 
-.logo {
-    height: 50px;
-}
-
-.navbar:before, .navbar:after {
+.rounded-card:before, .rounded-card:after {
     content: '';
     position: absolute;
     left: -2px;
@@ -42,30 +31,31 @@ body {
     }
 }
 
-.navbar:after {
-    filter: blur(50px);
+.rounded-card:after {
+    filter: blur(20px);
     border-radius: 15px;
 }
 
-.navbar img {
-    width: 8rem;
-    height: 100%;
+.first-row > div:first-child > img {
+    border-radius: 15px 0 0 0;
 }
 
-.navbar .navbar-brand {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.first-row > div:last-child > img {
+    border-radius: 0 15px 0 0;
 }
 
-.dropdown:hover .dropdown-menu {
-    display: block;
+.first-row > div:first-child {
+    padding-right: 0;
 }
 
-header .dropdown-menu {
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: white;
-    border-radius: 15px; 
-    text-align: center;
+.first-row > div:last-child {
+    padding-left: 0;
+}
+
+.second-row > div:first-child {
+    padding-right: 0;
+}
+
+.second-row > div:last-child {
+    padding-left: 0;
 }

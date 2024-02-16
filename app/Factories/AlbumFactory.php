@@ -124,9 +124,79 @@ class AlbumFactory {
     }
 
     public function deleteAlbum($id) {
+        //recupérer les musiques de l'album
+        $stmt = $this->pdo->prepare('SELECT idMusique FROM EST_CONSTITUE WHERE idAlbum = :id');
+        $stmt->execute([
+            'id'=> $id
+        ]);
+        $musiques = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        //delete EST_CONSTITUE
+        $stmt = $this->pdo->prepare('DELETE FROM EST_CONSTITUE WHERE idAlbum = :id');
+        $stmt->execute([
+            'id'=> $id
+        ]);
+        //delete NOTE
+        $stmt = $this->pdo->prepare('DELETE FROM NOTE WHERE idAlbum = :id');
+        $stmt->execute([
+            'id'=> $id
+        ]);
+        //delete FAVORIS
+        $stmt = $this->pdo->prepare('DELETE FROM FAVORIS WHERE idAlbum = :id');
+        $stmt->execute([
+            'id'=> $id
+        ]);
+        //delete EST_GENRE
+        $stmt = $this->pdo->prepare('DELETE FROM EST_GENRE WHERE idAlbum = :id');
+        $stmt->execute([
+            'id'=> $id
+        ]);
+        // Réccupérer l'id de l'image de l'album
+        $stmt = $this->pdo->prepare('SELECT idImage FROM ALBUM WHERE idAlbum = :id');
+        $stmt->execute([
+            'id'=> $id
+        ]);
+        $id_image_album = $stmt->fetch(PDO::FETCH_COLUMN);
+        //delete ALBUM
         $stmt = $this->pdo->prepare('DELETE FROM ALBUM WHERE idAlbum = :id');
-        $stmt->execute(['id' => $id]);
-        return true;
+        $stmt->execute([
+            'id'=> $id
+        ]);
+        //delete IMAGE_BD
+        $stmt = $this->pdo->prepare('DELETE FROM IMAGE_BD WHERE idImage = :id');
+        $stmt->execute([
+            'id'=> $id_image_album
+        ]);
+        //delete EST_DANS
+        foreach ($musiques as $musique) {
+            $stmt = $this->pdo->prepare('DELETE FROM EST_DANS WHERE idMusique = :id');
+            $stmt->execute([
+                'id'=> $musique
+            ]);
+        }
+        //recupérer les images des musiques
+        $id_image_musiques = [];
+        foreach ($musiques as $musique) {
+            $stmt = $this->pdo->prepare('SELECT idImage FROM MUSIQUE WHERE idMusique = :id');
+            $stmt->execute([
+                'id'=> $musique
+            ]);
+            $id_image_musiques[] = $stmt->fetch(PDO::FETCH_COLUMN);
+        }
+        //delete MUSIQUE
+        foreach ($musiques as $musique) {
+            $stmt = $this->pdo->prepare('DELETE FROM MUSIQUE WHERE idMusique = :id');
+            $stmt->execute([
+                'id'=> $musique
+            ]);
+        }
+        //delete IMAGE_BD
+        foreach ($id_image_musiques as $id_image_musique) {
+            $stmt = $this->pdo->prepare('DELETE FROM IMAGE_BD WHERE idImage = :id');
+            $stmt->execute([
+                'id'=> $id_image_musique
+            ]);
+        }
+        http_response_code(200);
     }
 
     public function getImageById($id) {
@@ -182,6 +252,22 @@ class AlbumFactory {
         $stmt = $this->pdo->prepare('SELECT COUNT(*) FROM NOTE WHERE idAlbum = :id');
         $stmt->execute(['id' => $id]);
         return $stmt->fetch();
+    }
+  
+    public function getImagesByMusiques($musiques) {
+        $images = [];
+        foreach ($musiques as $musique) {
+            $stmt = $this->pdo->prepare('SELECT * FROM IMAGE_BD WHERE idImage = (SELECT idImage FROM MUSIQUE WHERE idMusique = :id)');
+            $stmt->execute(['id' => $musique->getIdMusique()]);
+            $images[] = $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Image::class, [intval('idImage'), 'nomImage', 'dataImage']);
+        }
+        return $images;
+    }
+
+    public function getAlbumByPlaylist($id) {
+        $stmt = $this->pdo->prepare('SELECT * FROM ALBUM WHERE idAlbum = (SELECT idAlbum FROM EST_CONSTITUE WHERE idMusique = (SELECT idMusique FROM EST_DANS WHERE idPlaylist = :id))');
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Album::class, [intval('idAlbum'), 'nomAlbum', 'descriptionAlbum', intval('anneeAlbum'), intval('idArtiste'), intval('idImage')]);
     }
 }
 ?>

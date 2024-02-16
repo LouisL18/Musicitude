@@ -39,17 +39,57 @@ $content .= '</div></div>
         foreach ($super_album[0]['Musiques'] as $musique) {
             $content .= '<div class="card rounded-card text-dark mr-3 flex-grow-1 mb-3 mt-3">
                     <div class="card-body row">
-                        <div class="col-md-2 no-padding">
-                            <img src="data:image/jpeg;base64,' . utf8_decode($musique['Image'][0]->getDataImage()) . '" alt="' . $musique['Musique']->getNomMusique() . '" class="img-fluid img-thumbnail small-image">
-                        </div>
-                        <div class="col-md-8 no-padding">
-                            <h5>' . $musique['Musique']->getNomMusique() . '</h5>
-                            <p>' . $musique['Musique']->getDescriptionMusique() . '</p>
-                        </div>
+                            <div class="col-md-2 no-padding">
+                                <img src="data:image/jpeg;base64,' . utf8_decode($musique['Image'][0]->getDataImage()) . '" alt="' . $musique['Musique']->getNomMusique() . '" class="img-fluid img-thumbnail small-image">
+                            </div>
+                            <div class="col-md-8 no-padding">
+                                <h5>' . $musique['Musique']->getNomMusique() . '</h5>
+                                <p>' . $musique['Musique']->getDescriptionMusique() . '</p>
+                            </div>
+                            <div class="col text-right d-flex justify-content-end">
+                                <div class="dropdown">
+                                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">+</button>
+                                    <div class="dropdown-menu detail" aria-labelledby="dropdownMenuButton">';
+                                    foreach($super_playlist as $playlist) {
+                                        $isInPLaylist = false;
+                                        foreach($playlist['Musiques'] as $musiqueInPlaylist) {
+                                            if($musiqueInPlaylist->getIdMusique() == $musique['Musique']->getIdMusique()) {
+                                                $isInPLaylist = true;
+                                                break;
+                                            }
+                                        }
+                                        if(!$isInPLaylist) {
+                                            $content .= '<button class="dropdown-item" type="button" value="' . $playlist['Playlist']->getIdPlaylist() . ";" . $musique['Musique']->getIdMusique() . '" onclick="addMusiqueToPlaylist(this)">Ajouter à ' . $playlist['Playlist']->getNomPlaylist() . '</button>';
+                                        }
+                                        else {
+                                            $content .= '<button class="dropdown-item" type="button" value="' . $playlist['Playlist']->getIdPlaylist() . ";" . $musique['Musique']->getIdMusique() . '" onclick="addMusiqueToPlaylist(this)" disabled>Déjà dans ' . $playlist['Playlist']->getNomPlaylist() . '</button>';
+                                        }
+                                    }
+                                    
+                                    $content .= '</div>
+                            </div>
+                    </div>
                     </div>
                 </div>';
         }
 $content .= '</div>
     </div>
 </div>';
+$content .= <<<HTML
+<script>
+    function addMusiqueToPlaylist(button) {
+        let idPlaylist = button.value.split(';')[0];
+        let idMusique = button.value.split(';')[1];
+        fetch('/playlist/' + idPlaylist + '/add/' + idMusique, {
+            method: 'PUT',
+        })
+        .then(response => {
+            if(response.status === 200) {
+                button.innerText = "Ajouté avec succès";
+                button.disabled = true;
+            }
+        });
+    }
+</script>
+HTML;
 return $content;
