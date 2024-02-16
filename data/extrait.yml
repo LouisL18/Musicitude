@@ -43,7 +43,7 @@
 - by: The Finger
   entryId: 10669
   genre: []
-  img: null
+  img: default.jpg
   parent: Ryan Adams
   releaseYear: 2003
   title: We Are Fuck You
@@ -85,7 +85,7 @@
 - by: Whiskeytown
   entryId: 10770
   genre: [Alternative country]
-  img: null
+  img: default.jpg
   parent: Ryan Adams
   releaseYear: 0
   title: Forever Valentine
@@ -134,7 +134,7 @@
 - by: Dave Alvin
   entryId: 10919
   genre: [Folk rock, country rock]
-  img: null
+  img: default.jpg
   parent: Dave Alvin
   releaseYear: 2011
   title: Eleven Eleven

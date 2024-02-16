@@ -177,5 +177,11 @@ class AlbumFactory {
         $stmt = $this->pdo->query('SELECT DISTINCT anneeAlbum FROM ALBUM');
         return $stmt->fetchAll();
     }
+
+    public function getNbNoteByAlbum($id) {
+        $stmt = $this->pdo->prepare('SELECT COUNT(*) FROM NOTE WHERE idAlbum = :id');
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch();
+    }
 }
 ?>

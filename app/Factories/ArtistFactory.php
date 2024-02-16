@@ -3,6 +3,7 @@ namespace app\Factories;
 
 use app\Models\Artist;
 use app\Models\Image;
+use app\Factories\AlbumFactory;
 use PDO;
 
 class ArtistFactory {
@@ -77,6 +78,34 @@ class ArtistFactory {
         $stmt = $this->pdo->prepare('SELECT * FROM ARTISTE WHERE idArtiste = (SELECT idArtiste FROM ALBUM WHERE idAlbum = :id_album)');
         $stmt->execute(['id_album' => $id_album]);
         return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Artist::class, [intval('idArtiste'), 'nomArtiste', 'descriptionArtiste']);
+    }
+
+    public function getNoteMoyenneByArtist($id) {
+        $albumFactory = new AlbumFactory($this->pdo);
+        $albums = $albumFactory->getAlbumByArtist($id);
+        $note = 0;
+        $count = 0;
+        foreach ($albums as $album) {
+            $noteArray = $albumFactory->getNoteMoyenneByAlbum($album->getIdAlbum());
+            if (is_array($noteArray) && count($noteArray) > 0) {
+                $note += $noteArray[0];
+                $count++;
+            }
+        }
+        if ($count == 0) {
+            return 0;
+        }
+        return $note / $count;
+    }
+
+    public function getNbNoteByArtist($id) {
+        $albumFactory = new AlbumFactory($this->pdo);
+        $albums = $albumFactory->getAlbumByArtist($id);
+        $count = 0;
+        foreach ($albums as $album) {
+            $count += $albumFactory->getNbNoteByAlbum($album->getIdAlbum())[0];
+        }
+        return $count;
     }
 }
 ?>

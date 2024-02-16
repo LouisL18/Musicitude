@@ -4,6 +4,7 @@ namespace app\Controllers;
 use app\Factories\ArtistFactory;
 use app\Factories\AlbumFactory;
 use app\Factories\UserFactory;
+use app\Models\Artist;
 
 class ArtistController {
     protected $artistFactory;
@@ -34,12 +35,21 @@ class ArtistController {
 
     public function detail(int $id) {
         $artist = $this->artistFactory->getArtistById($id)[0];
+        $super_albums = [];
+        $albums = $this->albumFactory->getAlbumByArtist($artist->getIdArtiste());
+        foreach ($albums as $album) {
+            $super_albums[] = [
+                'Album' => $album,
+                'Image' => $this->albumFactory->getImageById($album->getIdImage()),
+            ];
+        }
         $super_artist = [
             'Artist' => $artist,
             'Image' => $this->artistFactory->getImageByArtistId($artist->getIdArtiste()),
-            'Albums' => $this->albumFactory->getAlbumByArtist($artist->getIdArtiste()),
+            'Albums' => $super_albums,
+            'Note' => $this->artistFactory->getNoteMoyenneByArtist($artist->getIdArtiste()),
+            'NbNotes' => $this->artistFactory->getNbNoteByArtist($artist->getIdArtiste()),
         ];
-        require_once 'app/Views/artist/detail.php';
         global $main;
         global $css;
         $main = require_once __DIR__ . '/../Views/artist/detail.php';
