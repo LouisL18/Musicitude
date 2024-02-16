@@ -36,6 +36,8 @@ $router->get('/album/{id}/edit', [$albumController, 'edit']);
 $router->get('/album/create', [$albumController, 'create']);
 $router->get('/playlists', [$playlistController, 'index']);
 $router->get('/playlist/{id}', [$playlistController, 'detail']);
+$router->get('/playlist/create', [$playlistController, 'create']);
+$router->get('/playlist/{id}/edit', [$playlistController, 'edit']);
 
 $router->put('/album/{id}', [$albumController, 'update']);
 $router->put('/artist/{id}', [$artistController, 'update']);
@@ -46,6 +48,7 @@ $router->delete('/album/{id}', [$albumController, 'delete']);
 $router->delete('/artist/{id}', [$artistController, 'delete']);
 $router->delete('/user/{id}', [$userController, 'delete']);
 $router->delete('/playlist/{id}/remove/{id}', [$playlistController, 'remove']);
+$router->delete('/playlist/{id}/delete', [$playlistController, 'delete']);
 
 $router->post('/login', [$userController, 'login']);
 $router->post('/album/create', [$albumController, 'create']);
@@ -56,5 +59,7 @@ $router->post('/register', [$userController, 'register']);
 $router->post('/albums/search', [$albumController, 'search']);
 $router->post('/albums', [$albumController, 'index']);
 $router->post('/album/{id}', [$albumController, 'detail']);
+$router->post('/playlist/create', [$playlistController, 'create']);
+$router->post('/playlist/{id}/edit', [$playlistController, 'edit']);
 
 $router->run();
