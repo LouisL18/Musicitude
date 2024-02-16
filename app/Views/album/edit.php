@@ -62,6 +62,7 @@ foreach ($super_album[0]['Musiques'] as $musique) {
 }
 $content .= '</div>';
 $content .= '</div>';
+$content .= '<button type="button" class="btn btn-danger position-fixed" style="width: auto; bottom: 1vh; left: 1vw;">Supprimer</button>';
 $content .= '<input type="submit" value="Mettre à jour" class="position-fixed btn btn-primary" style="width: auto; bottom: 1vh; right: 1vw;">';
 $content .= '</form>';
 $content .= <<<HTML
@@ -85,8 +86,19 @@ $content .= <<<HTML
             }
         });
     });
+    document.querySelector("button.btn-danger").addEventListener("click", function() {
+        if (confirm("Voulez-vous vraiment supprimer cet album ?")) {
+            fetch("/album/$id", {
+                method: "DELETE"
+            }).then(response => response.status)
+            .then(status => {
+                if (status === 200) {
+                    window.location.href = "/albums";
+                }
+            });
+        }
+    });
 </script>';
 HTML;
-
 return $content;
 ?>
