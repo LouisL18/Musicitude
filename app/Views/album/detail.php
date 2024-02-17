@@ -9,7 +9,15 @@ $content .= '</div>
         <div class="col-md-7 flex-grow-1">';
         $content .= '<div class="card rounded-card text-dark mb-3">
         <div class="card-body">
-        <h3 class="display-4">' . $super_album[0]['Album']->getNomAlbum() . '</h3>
+        <div class="d-flex justify-content-between">
+        <h3 class="display-4">' . $super_album[0]['Album']->getNomAlbum() . '</h3>';
+        $albumId = $super_album[0]['Album']->getIdAlbum();
+        if ($super_album[0]['IsFavorite']) {
+            $content.='<button onclick="removeFromFavorites(' . $albumId . ')" class="btn btn-primary">Enlever des favoris</button>';
+        } else {
+            $content.='<button onclick="addToFavorites(' . $albumId . ')" class="btn btn-primary">Ajouter aux favoris</button>';
+        }
+        $content.='</div>
         <p class="lead">' . $super_album[0]['Album']->getDescriptionAlbum() . '</p>
         <a href="/artist/' . $super_album[0]['Artiste'][0]->getIdArtiste() . '" class="text-decoration-none text-dark"><p class="lead">' . $super_album[0]['Artiste'][0]->getNomArtiste() . '</p></a>
         <p class="lead">' . $super_album[0]['Album']->getAnneeAlbum() . '</p>';
@@ -124,6 +132,26 @@ $content .= <<<HTML
         let stars = document.querySelectorAll('.star');
         stars.forEach(function(s) {
             s.classList.remove('highlighted');
+        });
+    }
+    function addToFavorites(id) {
+        fetch('/album/' + id + '/favorite', {
+            method: 'POST',
+        })
+        .then(response => {
+            if(response.status === 200) {
+                location.reload();
+            }
+        });
+    }
+    function removeFromFavorites(id) {
+        fetch('/album/' + id + '/favorite', {
+            method: 'DELETE',
+        })
+        .then(response => {
+            if(response.status === 200) {
+                location.reload();
+            }
         });
     }
     document.addEventListener('play', function(e){

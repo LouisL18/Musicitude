@@ -111,7 +111,8 @@ class AlbumController {
                 'Musiques' => $this->albumFactory->getMusiquesByAlbum($album->getIdAlbum()),
                 'Note' => $this->albumFactory->getNoteMoyenneByAlbum($album->getIdAlbum()),
                 'NbNote' => $this->albumFactory->getNbNoteByAlbum($id),
-            ]; 
+                'IsFavorite' => $this->albumFactory->isFavoris($id, $_SESSION['user_id']),
+            ];
             global $main;
             global $css;
             $playlists = $this->playlistFactory->getPlaylistsByUser($_SESSION['user_id']);
@@ -215,6 +216,20 @@ class AlbumController {
     public function deleteMusic(int $id) {
         if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
             $this->albumFactory->deleteMusic($id);
+            http_response_code(200);
+        }
+    }
+
+    public function favorite(int $id) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->albumFactory->favoriteAlbum($id, $_SESSION['user_id']);
+            http_response_code(200);
+        }
+    }
+
+    public function unfavorite(int $id) {
+        if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+            $this->albumFactory->unfavoriteAlbum($id, $_SESSION['user_id']);
             http_response_code(200);
         }
     }

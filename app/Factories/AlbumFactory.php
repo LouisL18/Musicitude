@@ -317,5 +317,30 @@ class AlbumFactory {
         $stmt = $this->pdo->prepare('DELETE FROM MUSIQUE WHERE idMusique = :id');
         $stmt->execute(['id' => $id]);
     }
+
+    public function isFavoris($idAlbum, $idUser) {
+        $stmt = $this->pdo->prepare('SELECT * FROM FAVORIS WHERE idUtilisateur = :idUser AND idAlbum = :idAlbum');
+        $stmt->execute([
+            'idUser' => $idUser,
+            'idAlbum' => $idAlbum
+        ]);
+        return $stmt->fetch() !== false;
+    }
+
+    public function favoriteAlbum($idAlbum, $idUser) {
+        $stmt = $this->pdo->prepare('INSERT INTO FAVORIS (idUtilisateur, idAlbum) VALUES (:idUser, :idAlbum)');
+        $stmt->execute([
+            'idUser' => $idUser,
+            'idAlbum' => $idAlbum
+        ]);
+    }
+
+    public function unfavoriteAlbum($idAlbum, $idUser) {
+        $stmt = $this->pdo->prepare('DELETE FROM FAVORIS WHERE idUtilisateur = :idUser AND idAlbum = :idAlbum');
+        $stmt->execute([
+            'idUser' => $idUser,
+            'idAlbum' => $idAlbum
+        ]);
+    }
 }
 ?>

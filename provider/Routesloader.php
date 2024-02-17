@@ -51,6 +51,7 @@ $router->delete('/user', [$userController, 'delete']);
 $router->delete('/playlist/{id}/remove/{id}', [$playlistController, 'remove']);
 $router->delete('/playlist/{id}/delete', [$playlistController, 'delete']);
 $router->delete('/musique/{id}', [$albumController, 'deleteMusic']);
+$router->delete('/album/{id}/favorite', [$albumController, 'unfavorite']);
 
 $router->post('/login', [$userController, 'login']);
 $router->post('/album/create', [$albumController, 'create']);
@@ -66,5 +67,6 @@ $router->post('/playlist/{id}/edit', [$playlistController, 'edit']);
 $router->post('/album/{id}/note/{id}', [$albumController, 'rate']);
 $router->post('/album/{id}/edit', [$albumController, 'edit']);
 $router->post('/user/edit', [$userController, 'edit']);
+$router->post('/album/{id}/favorite', [$albumController, 'favorite']);
 
 $router->run();

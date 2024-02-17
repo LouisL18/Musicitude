@@ -40,9 +40,7 @@ foreach ($super_artist['Albums'] as $album) {
     }
     $content .= "<div class='card-body d-flex flex-column justify-content-center align-items-center text-center'>";
     $content .= "<h5 class='card-title fs-4'>" . $album['Album']->getNomAlbum() . "</h5>";
-    $content .= "<p class='card-text fs-6'>" . $album['Album']->getDescriptionAlbum() . "</p>";
     $content .= "<p class='card-text fs-6'>" . $super_artist['Artist']->getNomArtiste() . '</p>';
-    $content .= "<p class='card-text fs-6'>" . $album['Album']->getAnneeAlbum() . "</p>";
     $content .= "</div>";
     $content .= "</div>";
     $content .= "</a>";
