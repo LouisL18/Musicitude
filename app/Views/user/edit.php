@@ -17,7 +17,7 @@ $content =
         <div class="form-group mt-2">
         <div class="col-md-6">
         <label for="image">Image</label>
-        <input type="file" class="form-control" id="image" name="image" accept="image/*" required>';
+        <input type="file" class="form-control" id="image" name="image" accept="image/*">';
         
         if (isset($_SESSION['artist_id'])) {
           $content .= '<label for="nom-artiste">Nom artiste</label>
