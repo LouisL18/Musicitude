@@ -14,8 +14,37 @@ class UserController {
     }
 
     public function profile() {
-        // get id $_SESSION['user_id'] -> $id -> $user = $this->userFactory->getUserById($id);
-        require_once 'app/Views/user/profile.php';
+        $user = $this->userFactory->getUserById($_SESSION['user_id']);
+        if (isset($_SESSION['artist_id'])) {
+            $artist = $this->artistFactory->getArtistById($_SESSION['artist_id']);
+        }
+        $super_user = [
+            'User' => $user[0],
+            'Image' => $this->userFactory->getImage($user[0]->getIdImage()),
+        ];
+        global $main;
+        global $css;
+        $main = require_once __DIR__ . '/../Views/user/profile.php';
+        $css = "profile";
+        require_once __DIR__ . '/../../public/index.php';
+    }
+
+    public function edit() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->userFactory->updateUser($_POST['nom'], $_POST['prenom'], $_POST['email'], $_POST['mot-de-passe'], $_FILES['image']['tmp_name'] != '' ? base64_encode(file_get_contents($_FILES['image']['tmp_name'])) : null);
+            header('Location: /user');
+        }
+        elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            $user = $this->userFactory->getUserById($_SESSION['user_id']);
+            if (isset($_SESSION['artist_id'])) {
+                $artist = $this->artistFactory->getArtistById($_SESSION['artist_id']);
+            }
+            global $main;
+            global $css;
+            $main = require_once __DIR__ . '/../Views/user/edit.php';
+            $css = "../../css/profile";
+            require_once __DIR__ . '/../../public/index.php';
+        }
     }
 
     public function login() {
@@ -73,23 +102,15 @@ class UserController {
         }
     }
 
+    public function delete() {
+        $this->userFactory->deleteUser();
+        session_destroy();
+        http_response_code(200);
+    }
+
     public function logout() {
         session_destroy();
         header('Location: /login');
-    }
-
-    public function update(int $id) {
-        return null;
-    }
-
-    public function delete(int $id) {
-        return null;
-    }
-
-    public function create() {
-        // artist (case cochée ? + nom d'artiste ?) ? -> create artist + create user ?
-        // user -> create user ?
-        return null;
     }
 }
 ?>
