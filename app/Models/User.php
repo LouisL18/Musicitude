@@ -41,23 +41,5 @@ class User {
     public function getIdImage(): int {
         return $this->idImage;
     }
-
-    public function fullRender(): string {
-        return sprintf(
-            "<div>
-                <p>%d</p>
-                <p>%s</p>
-                <p>%s</p>
-                <p>%s</p>
-                <p>%d</p>
-            </div>",
-            $this->idUtilisateur,
-            $this->nomUtilisateur,
-            $this->prenomUtilisateur,
-            $this->emailUtilisateur,
-            $this->motDePasseUtilisateur,
-            $this->idImage
-        );
-    }
 }
 ?>

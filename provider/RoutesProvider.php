@@ -14,15 +14,17 @@ use app\Factories\UserFactory;
 use app\Controllers\UserController;
 use app\Factories\PlaylistFactory;
 use app\Controllers\PlaylistController;
+use app\Controllers\HomeController;
 
 $albumController = new AlbumController(new AlbumFactory(DatabaseProvider::getDataBase()), new ArtistFactory(DatabaseProvider::getDataBase()), new UserFactory(DatabaseProvider::getDataBase()), new PlaylistFactory(DatabaseProvider::getDataBase()));
 $artistController = new ArtistController(new ArtistFactory(DatabaseProvider::getDataBase()), new AlbumFactory(DatabaseProvider::getDataBase()), new UserFactory(DatabaseProvider::getDataBase()));
 $userController = new UserController(new UserFactory(DatabaseProvider::getDataBase()), new ArtistFactory(DatabaseProvider::getDataBase()));
 $playlistController = new PlaylistController(new PlaylistFactory(DatabaseProvider::getDataBase()), new UserFactory(DatabaseProvider::getDataBase()), new AlbumFactory(DatabaseProvider::getDataBase()), new ArtistFactory(DatabaseProvider::getDataBase()));
+$homeController = new HomeController(new ArtistFactory(DatabaseProvider::getDataBase()), new AlbumFactory(DatabaseProvider::getDataBase()), new UserFactory(DatabaseProvider::getDataBase()), new PlaylistFactory(DatabaseProvider::getDataBase()));
 
 $router = new Router();
 
-$router->get('/', [$albumController, 'index']);
+$router->get('/', [$homeController, 'index']);
 $router->get('/login', [$userController, 'login']);
 $router->get('/logout', [$userController, 'logout']);
 $router->get('/register', [$userController, 'register']);

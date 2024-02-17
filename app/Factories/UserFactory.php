@@ -228,5 +228,18 @@ class UserFactory {
         $stmt->execute(['id' => $id]);
         return $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Image::class, [intval('idImage'), 'nomImage', 'dataImage']);
     }
+
+    public function getFavoris(int $id) {
+        $stmt = $this->pdo->prepare('SELECT idAlbum FROM FAVORIS WHERE idUtilisateur = :id');
+        $stmt->execute(['id' => $id]);
+        $lstId = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        $albums = [];
+        foreach ($lstId as $id) {
+            $stmt = $this->pdo->prepare('SELECT * FROM ALBUM WHERE idAlbum = :id');
+            $stmt->execute(['id' => $id]);
+            $albums[] = $stmt->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Album::class, [intval('idAlbum'), 'nomAlbum', 'descriptionAlbum', intval('anneeAlbum'), intval('idArtiste'), intval('idImage')]);
+        }
+        return $albums;
+    }
 }
 ?>
