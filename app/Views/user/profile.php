@@ -15,7 +15,8 @@ $content =
         </div>
         <div class="col-md-6">';
         if (isset($_SESSION['artist_id'])) {
-          $content .= '<p class="lead text-white">Artiste : ' . $artist[0]->getNomArtiste() . '</p>';
+          $content .= '<p class="lead text-white">Artiste : ' . $artist[0]->getNomArtiste() . '</p>
+          <p class="lead text-white">Description : ' . $artist[0]->getDescriptionArtiste() . '</p>';
         }
         $content .= '<p class="lead text-white">Nom : ' . $super_user['User']->getNomUtilisateur() . '</p>
         <p class="lead text-white">Prénom : ' . $super_user['User']->getPrenomUtilisateur() . '</p>

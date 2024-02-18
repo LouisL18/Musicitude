@@ -21,7 +21,9 @@ $content =
         
         if (isset($_SESSION['artist_id'])) {
           $content .= '<label for="nom-artiste">Nom artiste</label>
-          <input type="text" class="form-control" id="nom-artiste" name="nom-artiste" value="'  . $artist[0]->getNomArtiste() . '" required>';
+          <input type="text" class="form-control" id="nom-artiste" name="nom-artiste" value="'  . $artist[0]->getNomArtiste() . '" required>
+          <label for="description-artiste">Description</label>
+          <textarea class="form-control" id="description-artiste" name="description-artiste" rows="3" required>' . $artist[0]->getDescriptionArtiste() . '</textarea>';
         }
         $content .= '<label for="nom">Nom</label>
             

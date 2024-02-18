@@ -31,7 +31,7 @@ class UserController {
 
     public function edit() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->userFactory->updateUser(isset($_POST['nom-artiste']) ? $_POST['nom-artiste'] : null, $_POST['nom'], $_POST['prenom'], $_POST['email'], $_POST['mot-de-passe'], $_FILES['image']['tmp_name'] != '' ? base64_encode(file_get_contents($_FILES['image']['tmp_name'])) : null);
+            $this->userFactory->updateUser(isset($_POST['nom-artiste']) ? $_POST['nom-artiste'] : null, isset($_POST['description-artiste']) ? $_POST['description-artiste'] : null, $_POST['nom'], $_POST['prenom'], $_POST['email'], $_POST['mot-de-passe'], $_FILES['image']['tmp_name'] != '' ? base64_encode(file_get_contents($_FILES['image']['tmp_name'])) : null);
             header('Location: /user');
         }
         elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {

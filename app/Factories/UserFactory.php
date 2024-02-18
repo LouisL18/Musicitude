@@ -73,11 +73,19 @@ class UserFactory {
         return true;
     }
 
-    public function updateUser(string|null $nom_artiste, string $nom, string $prenom, string $email, string $mdp, string|null $image) {
+    public function updateUser(string|null $nom_artiste, string|null $description_artiste, string $nom, string $prenom, string $email, string $mdp, string|null $image) {
         if ($image != null) {
-            $stmt = $this->pdo->prepare('UPDATE IMAGE_BD SET dataImage = :dataImage WHERE idImage = (SELECT idImage FROM UTILISATEUR WHERE idUtilisateur = :idUtilisateur)');
+            $stmt = $this->pdo->query('SELECT MAX(idImage) FROM IMAGE_BD');
+            $idImage = $stmt->fetchColumn() + 1;
+            $stmt = $this->pdo->prepare('INSERT INTO IMAGE_BD (idImage, nomImage, dataImage) VALUES (:idImage, :nomImage, :dataImage)');
             $stmt->execute([
-                'dataImage' => $image,
+                'idImage' => $idImage,
+                'nomImage' => $idImage . '_image',
+                'dataImage' => $image
+                ]);
+            $stmt = $this->pdo->prepare('UPDATE UTILISATEUR SET idImage = :idImage WHERE idUtilisateur = :idUtilisateur');
+            $stmt->execute([
+                'idImage' => $idImage,
                 'idUtilisateur' => $_SESSION['user_id']
                 ]);
         }
@@ -91,9 +99,10 @@ class UserFactory {
             
             ]);
         if ($nom_artiste != null) {
-            $stmt = $this->pdo->prepare('UPDATE ARTISTE SET nomArtiste = :nomArtiste WHERE idArtiste = :idArtiste');
+            $stmt = $this->pdo->prepare('UPDATE ARTISTE SET nomArtiste = :nomArtiste, descriptionArtiste = :descriptionArtiste WHERE idArtiste = :idArtiste');
             $stmt->execute([
                 'nomArtiste' => $nom_artiste,
+                'descriptionArtiste' => $description_artiste,
                 'idArtiste' => $_SESSION['artist_id']
                 ]);
         }

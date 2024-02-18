@@ -13,7 +13,6 @@ foreach ($super_artists as $artist) {
     }
     $content .= "<div class='card-body d-flex flex-column justify-content-center align-items-center text-center'>";
     $content .= "<h5 class='card-title fs-4'>" . $artist['Artist']->getNomArtiste() . "</h5>";
-    $content .= "<p class='card-text fs-6'>" . $artist['Artist']->getDescriptionArtiste() . "</p>";
     $content .= "</div>";
     $content .= "</div>";
     $content .= "</a>";
