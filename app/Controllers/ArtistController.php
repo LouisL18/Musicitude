@@ -56,17 +56,5 @@ class ArtistController {
         $css = '../../css/artist';
         require_once __DIR__ . '/../../public/index.php';
     }
-
-    public function update(int $id) {
-        return null;
-    }
-
-    public function delete(int $id) {
-        return null;
-    }
-
-    public function create() {
-        return null;
-    }
 }
 ?>

@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once __DIR__ . '../../provider/Routesloader.php';
+require_once __DIR__ . '../../provider/RoutesProvider.php';
 $header = '';
 global $main;
 if (isset($css)) {

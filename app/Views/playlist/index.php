@@ -2,9 +2,6 @@
 $content = "<div class='row justify-content-center'>";
 $i = 0;
 foreach ($super_playlists as $playlist) {
-    if ($i % 5 == 0 && $i != 0) {
-        $content .= "</div><div class='row justify-content-center'>";
-    }
     $content .= "<div class='col-lg-2 mb-5 d-flex justify-content-center'>";
     $content .= "<a href='playlist/" . $playlist['Playlist']->getIdPlaylist() . "' class='text-decoration-none text-dark'>";
     $content .= "<div class='card rounded-card'>";
@@ -30,13 +27,11 @@ foreach ($super_playlists as $playlist) {
     }
     $content .= "<div class='card-body d-flex flex-column justify-content-center align-items-center text-center'>";
     $content .= "<h5 class='card-title fs-4'>" . $playlist['Playlist']->getNomPlaylist() . "</h5>";
-    $content .= "<p class='card-text fs-6'>" . $playlist['Playlist']->getDescriptionPlaylist() . "</p>";
     $content .= "<p class='card-text fs-6'>" . $playlist['NbMusiques'] . " musiques</p>";
     $content .= "</div>";
     $content .= "</div>";
     $content .= "</a>";
     $content .= "</div>";
-    $i++;
 }
 $content .= "</div>";
 return $content;

@@ -78,22 +78,6 @@
     border-radius: 0 15px 0 0;
 }
 
-.first-row > div:first-child {
-    padding-right: 0;
-}
-
-.first-row > div:last-child {
-    padding-left: 0;
-}
-
-.second-row > div:first-child {
-    padding-right: 0;
-}
-
-.second-row > div:last-child {
-    padding-left: 0;
-}
-
 .second-row > div:first-child > img {
     border-radius: 0 0 0 15px;
 }

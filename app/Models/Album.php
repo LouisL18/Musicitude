@@ -41,43 +41,5 @@ class Album {
     public function getIdImage(): int|null {
         return $this->idImage;
     }
-
-    public function fullRender(): string {
-        return sprintf(
-            "<div>
-                <p>%d</p>
-                <p>%s</p>
-                <p>%s</p>
-                <p>%s</p>
-                <p>%d</p>
-                <p>%d</p>
-            </div>",
-            $this->idAlbum,
-            $this->nomAlbum,
-            $this->descriptionAlbum,
-            $this->anneeAlbum,
-            $this->idArtiste,
-            $this->idImage
-            );
-    }
-
-    public function listRender(): string {
-        return sprintf(
-            "<div>
-                <p>%d</p>
-                <p>%s</p>
-                <p>%s</p>
-                <p>%s</p>
-                <p>%d</p>
-                <p>%d</p>
-            </div>",
-            $this->idAlbum,
-            $this->nomAlbum,
-            $this->descriptionAlbum,
-            $this->anneeAlbum,
-            $this->idArtiste,
-            $this->idImage
-            );
-    }
 }
 ?>

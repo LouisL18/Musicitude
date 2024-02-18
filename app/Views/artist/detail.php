@@ -34,7 +34,7 @@ foreach ($super_artist['Albums'] as $album) {
     }
     $content .= "<div class='col-lg-2 mb-5 d-flex justify-content-center'>";
     $content .= "<a href='/album/" . $album['Album']->getIdAlbum() . "' class='text-decoration-none text-dark'>";
-    $content .= "<div class='card rounded-card'>";
+    $content .= "<div class='card rounded-card album'>";
     if ($album['Image']) {
         $content .= "<img class='card-img-top' src='data:image/jpeg;base64," . utf8_decode($album['Image'][0]->getDataImage()) . "' alt='" . $album['Image'][0]->getNomImage() . "'>";
     }

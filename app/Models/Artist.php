@@ -23,18 +23,5 @@ class Artist {
     public function getDescriptionArtiste(): string|null {
         return $this->descriptionArtiste;
     }
-
-    public function fullRender(): string {
-        return sprintf(
-            "<div>
-                <p>%d</p>
-                <p>%s</p>
-                <p>%s</p>
-            </div>",
-            $this->idArtiste,
-            $this->nomArtiste,
-            $this->descriptionArtiste
-        );
-    }
 }
 ?>
