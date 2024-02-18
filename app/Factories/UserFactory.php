@@ -73,7 +73,7 @@ class UserFactory {
         return true;
     }
 
-    public function updateUser(string $nom, string $prenom, string $email, string $mdp, string|null $image) {
+    public function updateUser(string|null $nom_artiste, string $nom, string $prenom, string $email, string $mdp, string|null $image) {
         if ($image != null) {
             $stmt = $this->pdo->prepare('UPDATE IMAGE_BD SET dataImage = :dataImage WHERE idImage = (SELECT idImage FROM UTILISATEUR WHERE idUtilisateur = :idUtilisateur)');
             $stmt->execute([
@@ -90,7 +90,13 @@ class UserFactory {
             'idUtilisateur' => $_SESSION['user_id']
             
             ]);
-        return true;
+        if ($nom_artiste != null) {
+            $stmt = $this->pdo->prepare('UPDATE ARTISTE SET nomArtiste = :nomArtiste WHERE idArtiste = :idArtiste');
+            $stmt->execute([
+                'nomArtiste' => $nom_artiste,
+                'idArtiste' => $_SESSION['artist_id']
+                ]);
+        }
     }
 
     public function deleteUser() {
